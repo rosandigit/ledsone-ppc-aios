@@ -306,12 +306,11 @@ Where the correct downstream skill is ambiguous or the findings span several, th
 review records the options under **Recommended Next Skill** and flags the ambiguity
 as an **Outstanding Question** rather than guessing.
 
-> **Routing integration status.** As at authoring, `skills/ppc-brief.md` and
-> `skills/campaign-audit.md` do **not** yet name `product-pause-check` in their own
-> Dependency Matrices / input lists. This skill routes *to* `campaign-audit` and
-> `report-draft` by the existing convention, but the reciprocal references have not
-> been added to those files (no existing file is modified by this task). Recorded
-> under **Known Limitations**.
+> **Routing status.** `skills/ppc-brief.md` routes applicable product-pause requests
+> to `product-pause-check`, and `skills/campaign-audit.md` names it as an upstream
+> review skill. This skill routes its validated finding *to* `campaign-audit`, with
+> `report-draft` downstream through consolidation. Routing is a request for
+> evaluation and consolidation only — it never authorises a pause.
 
 ---
 
@@ -361,9 +360,6 @@ Pause decision logic.
   interacts with the stock gate and standard rules owned by
   `context/budget-rules.md`, and any precedence between pause rules, is not
   established in the source; treated as **[VERIFY]**. [VERIFY]
-- **Downstream routing not yet reciprocated.** `skills/ppc-brief.md` and
-  `skills/campaign-audit.md` do not yet reference `product-pause-check`; that
-  integration has not been made (no existing file modified here). [VERIFY]
 - **Cannot infer future performance.** It reviews historical/filed evidence; it does
   not predict outcomes.
 - **Cannot pause a product.** It produces DRAFT candidate findings only; any pause is
