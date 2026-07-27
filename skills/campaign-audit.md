@@ -35,10 +35,10 @@ If automation is implied, STOP and flag it.
 ## Purpose
 
 **Why this skill exists.** The review skills (`search-term-check`, `bid-check`,
-`acos-check`, `budget-check`, `waste-scan`, `keyword-expand`) each produce validated
+`acos-check`, `budget-check`, `waste-scan`, `keyword-expand`, `product-pause-check`, `hour-budget-check`) each produce validated
 findings for one dimension. A campaign owner needs those brought together into one
 coherent picture — what is healthy, what is at risk, what is unresolved — rather
-than reading six separate reviews. This skill performs that consolidation into a
+than reading eight separate reviews. This skill performs that consolidation into a
 single structured audit.
 
 **When it should be used.** After the relevant upstream review skills have run and
@@ -66,7 +66,8 @@ Inputs that may accompany a request. None is invented by the skill; each comes f
 the request, from filed evidence, or from upstream review outputs.
 
 - **Upstream review outputs** — completed records from `search-term-check`,
-  `bid-check`, `acos-check`, `budget-check`, `waste-scan`, `keyword-expand`.
+  `bid-check`, `acos-check`, `budget-check`, `waste-scan`, `keyword-expand`,
+  `product-pause-check`, `hour-budget-check`.
 - **Campaign Performance Report** and supporting Amazon Ads evidence the reviews
   cite.
 - **Campaign** — as defined in `context/campaign-list.md` (identity referenced
@@ -100,7 +101,7 @@ their rules or KPIs (see **Duplicate Truth Prevention**).
 | `context/budget-rules.md` | Budget-dimension context for consolidating `budget-check` findings |
 | `context/reporting-schedule.md` | Reporting governance — the audit is a report input |
 | `skills/ppc-brief.md` | The upstream skill that scopes the request |
-| `skills/search-term-check.md`, `skills/bid-check.md`, `skills/acos-check.md`, `skills/budget-check.md`, `skills/waste-scan.md`, `skills/keyword-expand.md` | The review skills whose validated findings this audit consolidates |
+| `skills/search-term-check.md`, `skills/bid-check.md`, `skills/acos-check.md`, `skills/budget-check.md`, `skills/waste-scan.md`, `skills/keyword-expand.md`, `skills/product-pause-check.md`, `skills/hour-budget-check.md` | The review skills whose validated findings this audit consolidates |
 
 Supporting: `validation/CONTEXT_REVIEW.md` (open `[VERIFY]` items and layer
 readiness).
@@ -233,7 +234,8 @@ downstream skill applies the rules in its governing `context/` document(s).
 | `scale-check` | The audit shows validated strength and headroom, making the campaign a scaling candidate, subject to the stock gate and efficiency gates (`context/budget-rules.md`, `context/target-metrics.md`) |
 
 Upstream review skills (`search-term-check`, `bid-check`, `acos-check`,
-`budget-check`, `waste-scan`, `keyword-expand`) are **inputs** to this audit — where
+`budget-check`, `waste-scan`, `keyword-expand`, `product-pause-check`,
+`hour-budget-check`) are **inputs** to this audit — where
 a dimension has not been reviewed, the audit may recommend running the relevant
 review skill first. Where the correct downstream skill is ambiguous or the findings
 span several, the audit records the options under **Recommended Next Skill** and
