@@ -207,6 +207,7 @@ document(s).
 | `bid-check` | Request concerns bid levels, once the sample-size gate in `context/bid-rules.md` can be met |
 | `acos-check` | Request concerns efficiency vs the ACoS/ROAS targets in `context/target-metrics.md` |
 | `budget-check` | Request concerns daily budgets, minimums, overrides or the stock gate (`context/budget-rules.md`) |
+| `product-pause-check` | Request concerns whether a product should be recommended for pause on advertising performance (`context/product-pause-rules.md`) |
 | `campaign-audit` | Request is a full campaign review against `context/campaign-list.md` |
 | `waste-scan` | Request concerns spend without return / candidates for negation |
 | `keyword-expand` | Request concerns discovering and adding new targeting keywords (`keyword-strategy.md`) |
