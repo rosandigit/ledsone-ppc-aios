@@ -1,4 +1,4 @@
-# PPC AIOS Current Architecture (Version 1)
+# PPC AIOS Current Architecture (Version 2)
 
 The authoritative description of the **current** LEDSone PPC AIOS implementation
 as it exists in this repository today.
@@ -17,16 +17,25 @@ Future architectural ideas are outside the scope of this document.
 
 | Field | Value |
 |-------|-------|
-| Document Title | PPC AIOS Current Architecture (Version 1) |
+| Document Title | PPC AIOS Current Architecture (Version 2) |
 | Document Type | Descriptive architecture record (handover material) |
 | Location | `handover/` — per its README, material another person or LLM needs to continue this work without verbal explanation |
 | Owner | Jathukulan — repository `Owner` in `README.md` and `CLAUDE.md` |
 | Reviewer | [VERIFY] — no Technical/Queryability Reviewer role is defined anywhere in this repository (see `validation/CONTEXT_REVIEW.md`) |
 | Status | Active |
-| Version | 1 |
+| Version | 2 |
 | Scope | The repository as it exists on the date below. No future architecture. |
-| Last Updated | 2026-07-24 |
-| Source Documents | `README.md`, `CLAUDE.md`, every folder `README.md`, the ten files in `skills/`, and `validation/CONTEXT_REVIEW.md` |
+| Last Updated | 2026-07-28 |
+| Source Documents | `README.md`, `CLAUDE.md`, every folder `README.md`, the ten files in `context/`, the twelve files in `skills/`, and `validation/CONTEXT_REVIEW.md` |
+
+**Version 2 change note.** Version 2 is a **current-state refresh only**. It adds
+two Context assets and two Skills that already existed in the repository but were
+not represented in Version 1 (`context/hour-budget-rules.md`,
+`context/product-pause-rules.md`, `skills/hour-budget-check.md`,
+`skills/product-pause-check.md`), corrects the layer counts, and states the
+current evidence position factually. **No architecture was redesigned, no
+governance was introduced, no business rule was added or changed, and no safety
+boundary was altered.**
 
 This document **links** to the authoritative files rather than restating their
 contents, in keeping with the repository's **No Duplicate Truth** rule
@@ -104,21 +113,32 @@ not, its owner and its status.
 
 - **Purpose:** Reusable AI context — the stable reference facts and rules skills
   read before producing any DRAFT recommendation.
-- **Contents:** `target-metrics.md`, `campaign-list.md`, `keyword-strategy.md`,
-  `negative-keyword-master.md`, `reporting-schedule.md`, `amazon-vendor-bridge.md`,
-  and the two authoritative rule files `bid-rules.md` and `budget-rules.md`.
+- **Contents:** `README.md` plus **ten** Context assets — `target-metrics.md`,
+  `campaign-list.md`, `keyword-strategy.md`, `negative-keyword-master.md`,
+  `reporting-schedule.md`, `amazon-vendor-bridge.md`, the two authoritative rule
+  files `bid-rules.md` and `budget-rules.md`, and the two canonical
+  decision-rule files `hour-budget-rules.md` (intraday Hour Budget) and
+  `product-pause-rules.md` (product-performance pause).
 - **Business value:** The single source of PPC truth. It is the authoritative
-  home for KPI targets, bid and budget rules, keyword strategy and reporting
-  governance, so no downstream document has to restate them.
+  home for KPI targets, bid and budget rules, Hour Budget and Product Pause
+  decision logic, keyword strategy and reporting governance, so no downstream
+  document has to restate them.
+- **Rule-family separation.** `budget-rules.md` owns the **Standard daily**
+  budget rules; `hour-budget-rules.md` owns the **intraday** Hour Budget rule.
+  They are separate canonical owners and separate rule families — neither
+  supersedes or absorbs the other. `product-pause-rules.md` owns
+  product-performance pause decision logic and is likewise separate. The values
+  and conditions inside all three remain in their own files and are referenced
+  here, never restated.
 
 ### `skills/`
 
 - **Purpose:** Definitions of the repeatable PPC checks the AI can run. Every
   skill produces DRAFT recommendations only.
-- **Contents:** `README.md` plus ten skill files — `ppc-brief.md`,
+- **Contents:** `README.md` plus **twelve** skill files — `ppc-brief.md`,
   `search-term-check.md`, `bid-check.md`, `acos-check.md`, `budget-check.md`,
-  `waste-scan.md`, `keyword-expand.md`, `campaign-audit.md`, `report-draft.md`,
-  `scale-check.md`.
+  `hour-budget-check.md`, `product-pause-check.md`, `waste-scan.md`,
+  `keyword-expand.md`, `campaign-audit.md`, `report-draft.md`, `scale-check.md`.
 - **Business value:** Standardises how a PPC request is scoped, reviewed against
   the rules in `context/`, and turned into validated, evidence-checked findings.
 
@@ -126,9 +146,10 @@ not, its owner and its status.
 
 - **Purpose:** Source data and exports that recommendations are based on
   (evidence-first: no recommendation without a reference here).
-- **Contents:** `README.md`, `TEMPLATE_EVIDENCE_RECORD.md`, plus filed exports
-  and their metadata records. Filename and metadata-record conventions are
-  documented in `evidence/README.md`.
+- **Contents:** `README.md` and `TEMPLATE_EVIDENCE_RECORD.md`. The layer is
+  structurally in place; **no runtime evidence export is currently filed**.
+  Filename and metadata-record conventions are documented in
+  `evidence/README.md`, and a template is a convention, not filed evidence.
 - **Business value:** Traceability. Every DRAFT recommendation references the
   evidence it derives from, including source, date and date range.
 
@@ -217,18 +238,38 @@ the documented AI workflow from `README.md`, expressed against the folders that
 implement it. No new stage or layer has been added.
 
 ```
-Context        (context/ — read the authoritative rules and targets first)
+Business Question   (the PPC request or question being asked)
    |
-Evidence       (evidence/ — the filed source data a recommendation must rest on)
+ppc-brief           (skills/ — the entry router: scopes the request, checks
+   |                 evidence, and recommends which skill should run next)
    |
-Skills         (skills/ — a repeatable review turns evidence into DRAFT findings)
+Context             (context/ — the authoritative rules and targets the
+   |                 evaluating skill reads first, by reference)
    |
-Reports        (reports/ — validated findings formatted into a report draft)
+Evidence            (evidence/ — the filed source data a recommendation must
+   |                 rest on; if it is absent the skill returns Insufficient
+   |                 Evidence)
    |
-Decisions      (decisions/ — a human approves; the record is filed here)
+Skill               (skills/ — the evaluating review skill turns evidence into
+   |                 a validated DRAFT finding)
    |
-Handover       (handover/ — what is needed to continue the work)
+campaign-audit      (skills/ — consolidates validated findings across
+   |                 dimensions; it re-decides nothing)
+   |
+report-draft        (skills/ — formats validated findings into a report draft;
+   |                 it performs no new analysis)
+   |
+Reports             (reports/ — the draft is filed, reviewed and, after
+   |                 approval, issued)
+   |
+Decisions           (decisions/ — a human approves; the record is filed here)
+   |
+Handover            (handover/ — what is needed to continue the work)
 ```
+
+This is the single flow model for the AIOS. It is the same chain Version 1
+recorded, shown with its entry router and consolidation/reporting steps named;
+no alternative or parallel flow exists.
 
 Supporting folders feed this flow without adding a new stage:
 `intelligence-inbox/` is the raw intake point that is triaged into the layers
@@ -237,11 +278,16 @@ consult; `validation/` holds accuracy checks on the content; `github-prompts/`
 stores the prompts used to run it.
 
 Within `skills/`, the documented order of use is: `ppc-brief` scopes the request
-first; the review skills (`search-term-check`, `bid-check`, `acos-check`,
-`budget-check`, `waste-scan`, `keyword-expand`) produce validated findings;
-`campaign-audit` consolidates them; `report-draft` formats them; `scale-check`
-is the terminal review. This ordering is described in the skill files
-themselves; this document does not restate their rules.
+first and routes it; the review skills (`search-term-check`, `bid-check`,
+`acos-check`, `budget-check`, `hour-budget-check`, `product-pause-check`,
+`waste-scan`, `keyword-expand`) produce validated findings; `campaign-audit`
+consolidates them; `report-draft` formats them; `scale-check` is the terminal
+review. This ordering is described in the skill files themselves; this document
+does not restate their rules.
+
+`ppc-brief` routes to every one of the other eleven skills, including
+`hour-budget-check` and `product-pause-check`. Routing is a request for
+evaluation only — it never authorises a change.
 
 ----------------------------------------------------
 
@@ -268,8 +314,8 @@ No part of the AIOS performs automatic execution within Amazon Ads.
 
 ## Section 4 — Existing Skills
 
-The ten skills below are the skills that currently exist in `skills/`. Names are
-reproduced exactly; none has been added or renamed. Every skill outputs DRAFT
+The twelve skills below are the skills that currently exist in `skills/`. Names
+are reproduced exactly; none has been added or renamed. Every skill outputs DRAFT
 recommendations only, never applies Amazon Ads changes, requires human approval,
 and STOPs and flags if automation is implied. Every skill applies the rules in
 `context/` **by reference** and never restates them.
@@ -329,6 +375,52 @@ record), not an applied change. The "Outputs" below summarise that record.
 - **Outputs:** A completed budget-review record (budget findings, validation
   status, recommended action as DRAFT, recommended next skill).
 
+### `hour-budget-check`
+
+- **Business purpose:** Evaluate whether a campaign should receive a DRAFT
+  **intraday** budget-increase recommendation under the Hour Budget rule.
+- **Role:** REVIEW / EVALUATION.
+- **Canonical rule authority:** `context/hour-budget-rules.md`. The rule's
+  conditions, constraint, action, cadence and marketplace parameters are read
+  from that file by reference and are not reproduced here or in the skill.
+- **Inputs:** Evaluation timestamp/date, marketplace, campaign identity and type,
+  and the **current-day (intraday)** figures the canonical rule requires. The
+  skill does not substitute multi-day evidence for current-day evidence.
+- **Outputs:** A completed intraday review record — a DRAFT increase
+  recommendation, No Action, or Insufficient Evidence — with its evidence basis
+  and recommended next skill.
+- **Flow:** `ppc-brief` → `hour-budget-check` → `campaign-audit` →
+  `report-draft`.
+- **Boundary — separate from Standard daily budget review.** Intraday Hour Budget
+  review is a distinct rule family from the Standard daily budget review owned by
+  `context/budget-rules.md` and `skills/budget-check.md`. Neither absorbs the
+  other, and this skill is not a general budget-adequacy review.
+- **Execution boundary:** The AIOS never increases a campaign budget and never
+  schedules a budget change. "Hourly" describes a re-evaluation cadence, not an
+  action. Any approved increase is applied manually in Amazon Ads by a human.
+
+### `product-pause-check`
+
+- **Business purpose:** Evaluate whether a product should receive a DRAFT pause
+  recommendation because of advertising performance.
+- **Role:** REVIEW / EVALUATION.
+- **Canonical rule authority:** `context/product-pause-rules.md`. The rule
+  families, evaluation windows, conditions, price tiers, exceptions and
+  marketplace parameters are read from that file by reference and are not
+  reproduced here or in the skill.
+- **Inputs:** Evaluation date, marketplace, campaign type/scope, product/ASIN
+  identity and Product Price (from the product-master owner
+  `context/amazon-vendor-bridge.md`), plus the **product/ASIN-level** performance
+  figures the applicable canonical rule requires. Campaign-level data is not a
+  substitute for product-level data.
+- **Outputs:** A completed product-pause review record — a DRAFT pause
+  recommendation, No Action, or Insufficient Evidence — with its evidence basis
+  and recommended next skill.
+- **Flow:** `ppc-brief` → `product-pause-check` → `campaign-audit` →
+  `report-draft`.
+- **Boundary — evaluates and recommends only.** **The AIOS never pauses a
+  product.** Any approved pause is applied manually in Amazon Ads by a human.
+
 ### `waste-scan`
 
 - **Purpose:** Reviews campaign evidence to identify potential wasted advertising
@@ -356,8 +448,11 @@ record), not an applied change. The "Outputs" below summarise that record.
   skills into one structured campaign audit (overall health, validated
   strengths/risks, unresolved gaps, conflicts, follow-ups). It re-decides
   nothing.
-- **Inputs:** The validated outputs of the upstream review skills, plus the
-  underlying Amazon Ads evidence those reviews cite.
+- **Inputs:** The validated outputs of the eight upstream review skills —
+  `search-term-check`, `bid-check`, `acos-check`, `budget-check`,
+  `hour-budget-check`, `product-pause-check`, `waste-scan`, `keyword-expand` —
+  plus the underlying Amazon Ads evidence those reviews cite. A dimension with no
+  validated review is recorded as a coverage gap, never assumed healthy.
 - **Outputs:** A single structured campaign audit for reporting and human review.
 
 ### `report-draft`
@@ -398,6 +493,17 @@ exists today is described.
    unchanged. Skills consult this filed evidence together with the rules in
    `context/`. If required evidence is missing, a skill records **Insufficient
    Evidence** rather than proceeding.
+
+   **Current position (stated factually).** The evidence layer exists
+   structurally — the folder, the README conventions and the metadata-record
+   template are all in place — but **no runtime evidence export is currently
+   filed**. Every evaluation capability therefore remains evidence-gated today
+   and returns **Insufficient Evidence** rather than a guessed decision. That is
+   the designed behaviour under the evidence-first policy in `README.md` and
+   `CLAUDE.md`, not a defect in any skill. This document records the position; it
+   does not resolve it and defines no evidence-storage convention — those remain
+   owned by `evidence/README.md` and indexed in
+   `validation/REPOSITORY_GAP_REGISTER.md`.
 
 3. **Reports.** Validated findings from the skills are formatted by `report-draft`
    into a report draft and filed in `reports/` (`weekly/`, `monthly/`), with sent
@@ -485,7 +591,14 @@ already documents. These are stated, not solved; this document proposes no fixes
   cadence `[VERIFY]`, which cascades into undefined review frequencies elsewhere.
 - **External evidence not filed.** Sources cited elsewhere (e.g.
   `Amazon_BGCT_PayPerClick.pdf` and the "Approved PPC Metrics (2026-07-22)"
-  record) are not yet filed in `evidence/`.
+  record) are not yet filed in `evidence/`. `context/hour-budget-rules.md` and
+  `context/product-pause-rules.md` likewise each record their own primary source
+  as not confirmed filed; each owning file states its position, which is not
+  restated here.
+- **No runtime evidence filed.** The `evidence/` layer holds its README and
+  metadata-record template only. Until runtime exports are filed, every
+  evaluation skill correctly returns **Insufficient Evidence**, so no capability
+  can yet produce an operationally usable finding (see Section 5).
 - **No approved retention policy.** No retention/archival period is defined for
   evidence or for weekly/monthly report drafts; only `reports/sent/` immutability
   is documented.
@@ -536,9 +649,22 @@ Using only this document, another LLM can answer the required questions:
 | What business problem does it solve? | Yes | Section 1 |
 | What folders currently exist? | Yes | Section 2 |
 | What does each folder do? | Yes | Section 2 |
+| How many Context assets currently exist? | Yes | Section 2 — ten, named |
+| How many Skills currently exist? | Yes | Section 2; Section 4 — twelve, named |
 | How does work currently flow? | Yes | Section 3 |
+| What does `ppc-brief` do? | Yes | Section 3; Section 4 — the entry router |
 | Which skills currently exist? | Yes | Section 4 |
+| Which skill handles Standard **daily** budget review? | Yes | Section 4 — `budget-check`, against `context/budget-rules.md` |
+| Which skill handles **intraday** Hour Budget review? | Yes | Section 4 — `hour-budget-check` |
+| Which Context file owns Hour Budget rules? | Yes | Section 2; Section 4 — `context/hour-budget-rules.md` |
+| Which skill handles Product Pause review? | Yes | Section 4 — `product-pause-check` |
+| Which Context file owns Product Pause rules? | Yes | Section 2; Section 4 — `context/product-pause-rules.md` |
+| Where do validated review findings go? | Yes | Section 3; Section 4 — `campaign-audit`, then `report-draft`, then `reports/` |
+| What does `campaign-audit` do? | Yes | Section 4 — consolidates validated findings; re-decides nothing |
+| What does `report-draft` do? | Yes | Section 4 — formats validated findings; performs no new analysis |
 | How is evidence currently used? | Yes | Section 5 |
+| Why may evaluation currently return Insufficient Evidence? | Yes | Section 5; Section 8 — no runtime evidence is filed yet |
+| Can the AIOS automatically change Amazon Ads? | Yes | Section 1; Section 3 boundary — **No** |
 | Who owns the work? | Yes | Section 6 |
 | What are the current limitations? | Yes | Section 8 |
 
@@ -563,5 +689,27 @@ restating it (No Duplicate Truth).
 - ✓ Future ideas confined to Section 9 and clearly labelled as proposals
   requiring separate approval.
 - ✓ Descriptive, not prescriptive.
+
+**Version 2 refresh checks**
+
+- ✓ Counts match the repository at the recorded date: **ten** Context assets and
+  **twelve** Skills, each named.
+- ✓ `context/hour-budget-rules.md` and `context/product-pause-rules.md` are
+  represented in Section 2.
+- ✓ `skills/hour-budget-check.md` and `skills/product-pause-check.md` are
+  represented in Sections 2, 3 and 4.
+- ✓ Hour Budget and Standard daily Budget remain **separate rule families with
+  separate canonical owners and separate skills**; neither absorbs the other.
+- ✓ No rule threshold, percentage, monetary value, condition, window, price tier
+  or marketplace parameter has been copied into this document — all remain owned
+  by their `context/` files and are referenced only.
+- ✓ No Amazon Ads execution capability is implied anywhere: the AIOS never
+  increases a budget, never schedules a change, and never pauses a product.
+- ✓ One flow model only; no second or parallel architecture introduced.
+- ✓ No governance role, approval path or evidence-storage convention invented.
+- ✓ Evidence position stated factually — the layer exists, no runtime evidence is
+  filed, capabilities remain evidence-gated.
+- ✓ Only this file changed; no unrelated cleanup performed and no open gap
+  resolved.
 
 **Output: PASS**
