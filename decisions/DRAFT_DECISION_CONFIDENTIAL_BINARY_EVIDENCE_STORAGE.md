@@ -31,7 +31,7 @@ Limitations). The status inside this document, not the filename, is authoritativ
 | Approval Date | 2026-07-28 — the date the Owner's direction approval was communicated and recorded in this repository. If the Owner's underlying decision was taken on an earlier date, that date is `[VERIFY]`; none is invented here. |
 | Approval Scope | **The architecture direction only.** No storage location, reference mechanism, retention rule, schema change, permissions model, supersession process or implementation step is approved. |
 | Created | 2026-07-28 |
-| Revised | 2026-07-28 — (i) four review findings addressed: evidence supersession (Known Unknown 14), evidence owner/steward (Known Unknown 15), Gap Impact coverage note, retention as an explicit implementation gate (Precondition 2); current-state statements re-checked at HEAD `542ff02`, none changed. (ii) Owner direction approval recorded — see **Approval Record**. No implementation performed, no `[VERIFY]` resolved, no gap resolved. |
+| Revised | 2026-07-28 — (i) four review findings addressed: evidence supersession (Known Unknown 14), evidence owner/steward (Known Unknown 15), Gap Impact coverage note, retention as an explicit implementation gate (Precondition 2); current-state statements re-checked at HEAD `542ff02`, none changed. (ii) Owner direction approval recorded — see **Approval Record**. (iii) 2026-07-28 — Owner-confirmed Precondition 1 storage governance facts recorded under **Scope A — governance facts only**; Precondition 1 moved OPEN → **PARTIALLY SETTLED**. No implementation performed, no storage provisioned or accessed, no gap created or resolved, and no `[VERIFY]` resolved beyond the attributes the Owner explicitly supplied. |
 | Authoritative for | **The approved architecture direction only, and nothing else.** It defines no storage location, no reference format, no business rule, and authorises no action. |
 | Implementation Allowed | **NO** — unchanged by this approval; see **Implementation Preconditions** |
 
@@ -74,8 +74,8 @@ unapproved and open:
 - **No existing gap is resolved by this approval.** GAP-E01, GAP-E02, GAP-E03,
   GAP-C09, GAP-C10 and GAP-G01 all remain open; `validation/REPOSITORY_GAP_REGISTER.md`
   is not modified.
-- **All eight Implementation Preconditions remain in force** — Preconditions 1–6
-  and 8 are **OPEN**, and Precondition 7 is **PARTIALLY SETTLED**. Approving the
+- **All eight Implementation Preconditions remain in force** — Preconditions 2–6
+  and 8 are **OPEN**; Preconditions 1 and 7 are **PARTIALLY SETTLED**. Approving the
   direction does not satisfy, waive, reduce or reorder any of them. The single
   change of state is recorded openly in **Precondition 7**: because this record is
   no longer an unapproved draft, it is now eligible to remain in `decisions/`. The
@@ -456,14 +456,18 @@ which is out of scope and unapproved. Therefore:
 Every item below is genuinely undocumented in this repository. None is worked
 around by inventing a value.
 
-1. **Approved storage location** — no external, VM, cloud or company-controlled
-   evidence location is defined or approved anywhere in this repository. `[VERIFY]`
-2. **Location class** — whether the approved location should be a VM, a managed
-   file share, a document system or something else is undetermined. `[VERIFY]`
-3. **Access model** — who may retrieve confidential evidence, under what
-   authorisation, and how a request is made. `[VERIFY]`
-4. **Custody and backup** — who is custodian of the location, and whether backup or
-   replication exists. `[VERIFY]`
+1. **Approved storage location** — **partly answered.** The class and company-control
+   status are now confirmed; the **official drive / location name or identifier is
+   not**, and explicit permission to store confidential binary primary evidence
+   there is not. Values are recorded once, in **Precondition 1 — Owner-Confirmed
+   Storage Governance Facts**, and are not restated here. `[VERIFY]` on the
+   identifier and on the confidentiality permission.
+2. **Location class** — **answered.** Recorded in the Owner-confirmed facts section.
+3. **Access model** — **answered as supplied**: who may access, and how access is
+   requested and granted, are both recorded in the Owner-confirmed facts section.
+4. **Custody and backup** — **answered as supplied**: custodian, and the existence
+   of backup or replication, are recorded in the Owner-confirmed facts section. No
+   documented backup arrangement detail was supplied, and none is invented.
 5. **Retention** — no approved retention or archival period exists (GAP-E02 is open
    and owned by `evidence/README.md`). `[VERIFY]`
 6. **Evidence ID mechanism** — no evidence-ID concept, syntax or allocation process
@@ -549,6 +553,46 @@ confidential binary is stored or referenced under this direction.
 
 ---
 
+## Precondition 1 — Owner-Confirmed Storage Governance Facts
+
+**Scope A — governance facts only.** The Owner supplied and confirmed the facts
+below as the governance definition for Precondition 1. Recording them **authorises
+nothing**: no storage was provisioned, no folder created, no permission tested, no
+file uploaded, moved or copied, no evidence record created, and no `.gitignore`,
+`evidence/` or schema change made. `Implementation Allowed` remains **NO**.
+
+These facts are recorded **verbatim as supplied**. Nothing is inferred, expanded or
+strengthened, and no identifier, path, server, host, share name, URL, provider or
+service is invented.
+
+| Attribute | Owner-confirmed value | State |
+|-----------|----------------------|-------|
+| Storage class | **Shared network drive for internal documents** | **Confirmed** |
+| Official drive / location name or identifier | — | **`[VERIFY]`** — not supplied; none invented here |
+| Custodian | **CPPC** | **Confirmed** |
+| Backup or replication exists | **YES** | **Confirmed.** No documented arrangement detail was supplied with this confirmation, and none is invented here |
+| Who may access | **Manager, TL, MD** | **Confirmed** |
+| How access is requested / granted | **Manager request** | **Confirmed** |
+| Company-controlled | **YES** | **Confirmed** |
+| Confidential binary primary evidence explicitly permitted there | — | **`[VERIFY]`** — not confirmed; do **not** infer permission from company control or from the class |
+| Durable / independent of an individual employee's workstation | **YES, with permission** | **Confirmed, as qualified.** The qualifier "with permission" is part of the answer and is not dropped |
+| Date these arrangements were confirmed | — | **`[VERIFY]`** — the Owner states the arrangements were confirmed **before 2026-07-28**, but the exact date was not noted. No date is inferred. **Provenance only: this is not a Precondition 1 closure condition** |
+| Approval scope | **Scope A — governance facts only** | **Confirmed** |
+
+**What these facts do not do.** They do not approve Option C implementation, do not
+identify a specific location, do not establish that confidential binary primary
+evidence may be placed there, and do not satisfy any other precondition. The
+architecture direction remains approved; implementation remains not approved;
+Option E remains the active interim state.
+
+**Date boundary.** The `Approval Date` in the header of this record (2026-07-28) is
+the date of the **architecture-direction approval**. It is a different event from
+the storage-arrangement confirmation above, whose exact date is `[VERIFY]`. The two
+must not be conflated, and the direction-approval date must not be read as the
+storage-confirmation date.
+
+---
+
 ## Implementation Preconditions
 
 All of the following must be **approved and documented** before any part of the
@@ -560,7 +604,17 @@ explicitly below.
 
 1. An approved storage location for confidential primary evidence is **defined and
    documented** by the Owner — including its class, custodian and access model
-   (items 1–4 above).
+   (items 1–4 above). **PARTIALLY SETTLED — stated openly, not silently:** the
+   Owner has confirmed the storage class, custodian, backup existence, access list,
+   access-request route, company control and workstation independence — see
+   **Precondition 1 — Owner-Confirmed Storage Governance Facts** above. **Two
+   required attributes remain `[VERIFY]` and keep this precondition unmet:**
+   (a) the official drive / location name or identifier; (b) explicit permission to
+   store confidential binary primary evidence there. Until both are answered,
+   Precondition 1 is **not** satisfied. The **exact date** on which the
+   arrangements were confirmed is also `[VERIFY]`, but it is **provenance only and
+   is not a closure condition** — this precondition requires the location to be
+   defined and documented with its class, custodian and access model, not dated.
 2. **Required retention / archival governance is resolved or approved.** Storage
    **must not be stood up** while the retention question remains open, because a
    confidential-evidence store with no retention rule is an open-ended commitment
@@ -668,7 +722,15 @@ pointers, can answer:
 |----------|-------------|-------|
 | Why can confidential PDFs not simply be committed? | Yes | Current State #1, #3, #4, #9; Constraints 1, 8, 9; Option D — `CLAUDE.md` forbids creating binary files, `.gitignore` lists no PDF pattern, and a pushed commit has no documented removal path |
 | Is the architecture direction approved? | Yes | **Yes** — Approval Record; header `Approval Status`; approved by Jathukulan, direction only |
-| Is implementation approved? | Yes | **No** — header `Implementation Allowed: NO`; Approval Record; all eight Implementation Preconditions remain in force (1–6 and 8 OPEN; 7 PARTIALLY SETTLED) |
+| Is implementation approved? | Yes | **No** — header `Implementation Allowed: NO`; Approval Record; all eight Implementation Preconditions remain in force (2–6 and 8 OPEN; 1 and 7 PARTIALLY SETTLED) |
+| What storage class is confirmed? | Yes | Precondition 1 — Owner-Confirmed Storage Governance Facts |
+| Is the exact location identifier known? | Yes | **No — `[VERIFY]`**; not supplied, none invented |
+| Who is custodian, and does backup exist? | Yes | Owner-confirmed facts section — custodian recorded; backup/replication recorded as existing |
+| Who has access, and how is it requested? | Yes | Owner-confirmed facts section — access list and request route recorded |
+| Is the location company-controlled and workstation-independent? | Yes | Owner-confirmed facts section — both recorded, the second with its qualifier |
+| Is confidential binary evidence explicitly permitted there? | Yes | **No — `[VERIFY]`**; must not be inferred from company control or class |
+| Is the exact storage-confirmation date known? | Yes | **No — `[VERIFY]`**; Owner states before 2026-07-28, exact date not noted; no date inferred. **Provenance only — not a Precondition 1 closure condition** |
+| What is Precondition 1's current state? | Yes | **PARTIALLY SETTLED** — Implementation Precondition 1; **two** attributes remain `[VERIFY]`: the official location identifier and the confidential-binary permission |
 | Where are confidential binaries directed to live? | Yes | Decision section — an approved, non-Git, company-controlled location (Option C), at architecture level only |
 | Is a specific location approved yet? | Yes | **No.** Approval Record; Current State #8; Known Unknowns 1–4; the "Deliberately not specified" list |
 | Which state is operationally active now? | Yes | **Option E** — Approval Record; Owner / Review / Status; the interim state until every precondition is met |
@@ -712,11 +774,14 @@ pointers, can answer:
   Decision section and the Owner / Review / Status section. Implementation remains
   blocked; Option E remains the active interim state.
 - ✓ **All eight implementation preconditions remain in force** — none has been
-  fully resolved or waived by the architecture-direction approval. Preconditions
-  **1–6 and 8 remain OPEN**. **Precondition 7 is PARTIALLY SETTLED**: the settled
-  part is that this approved record is eligible to remain in `decisions/`;
-  rationale volume, and the placement of future unapproved governance drafts,
-  remain `[VERIFY]`.
+  fully resolved or waived. Preconditions **2–6 and 8 remain OPEN**.
+  **Precondition 1 is PARTIALLY SETTLED**: the Owner-confirmed storage governance
+  facts are recorded, while the official location identifier and the
+  confidential-binary permission remain `[VERIFY]`. The exact confirmation date is
+  also `[VERIFY]` but is provenance only, not a closure condition.
+  **Precondition 7 is PARTIALLY SETTLED**: the settled part is that this approved
+  record is eligible to remain in `decisions/`; rationale volume, and the placement
+  of future unapproved governance drafts, remain `[VERIFY]`.
 - ✓ **Approval scope contained** — the direction is approved; no location,
   provider, path, mechanism, evidence ID, checksum schema, classification schema,
   permissions model, retention rule, supersession rule or evidence owner was
