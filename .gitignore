@@ -31,3 +31,14 @@ credentials
 *.xls
 *.png
 *.jpg
+
+########################################
+# Approved exception — enforcement only
+########################################
+# Re-includes non-confidential Amazon Ads tabular exports under evidence/.
+# The governing decision is owned by evidence/README.md
+# ("Git Filing — Non-Confidential Tabular Exports"). This file enforces it and
+# does not define it. Scope is deliberately narrow: evidence/ only, .csv/.xlsx
+# only. All other commercial-data exclusions above remain in force everywhere.
+!evidence/**/*.csv
+!evidence/**/*.xlsx

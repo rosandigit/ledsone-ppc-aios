@@ -1,1 +1,9 @@
 * text=auto eol=lf
+
+# Enforcement only — the governing decision is owned by evidence/README.md
+# ("Git Filing — Non-Confidential Tabular Exports").
+# Approved non-confidential tabular evidence must stay byte-preserved: disable
+# text/EOL normalisation so originals are stored and checked out unchanged.
+# Scope is evidence/ only; line-ending policy elsewhere is unaffected.
+evidence/**/*.csv -text
+evidence/**/*.xlsx -text

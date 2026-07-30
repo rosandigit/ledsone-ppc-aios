@@ -16,6 +16,53 @@ Jathukulan
 ## Status
 Active
 
+## Git Filing — Non-Confidential Tabular Exports
+
+**Approved by the Owner.** Non-confidential Amazon Ads **tabular exports** in
+`.csv` or `.xlsx` format, filed under `evidence/`, **may be committed directly to
+this Git repository**, which is private.
+
+| Attribute | Approved value |
+|-----------|----------------|
+| Applies to | Non-confidential Amazon Ads tabular exports |
+| Formats | `.csv` and `.xlsx` only |
+| Location | `evidence/` and its sub-folders only |
+| Git handling | May be committed directly to this private repository |
+
+**Scope limits — these are part of the permission, not commentary:**
+
+- **`evidence/` only.** This permits nothing elsewhere. Commercial `.csv` /
+  `.xlsx` outside `evidence/` remains excluded from Git.
+- **These two formats only.** No other excluded commercial-data format is
+  permitted by this decision.
+- **Non-confidential only.** This permission does **not** apply to confidential
+  evidence of any kind.
+- **Confidential material is unchanged.** The two confidential configurator PDFs
+  remain governed by the separate approved storage direction recorded in
+  `decisions/DRAFT_DECISION_CONFIDENTIAL_BINARY_EVIDENCE_STORAGE.md`. Nothing
+  here changes that direction, its preconditions or its implementation status,
+  and no value from it is restated.
+
+**Originals stay unmodified.** A committed export must remain **byte-preserved** —
+never edited, re-cut, re-saved or reformatted — consistent with **What should NOT
+be stored here** above. Repository configuration (`.gitignore`,
+`.gitattributes`) **enforces** this permission; it does not define it. This
+section is the owning governance.
+
+**Committing does not create business truth.** An export held in Git is still
+source evidence only. It does not become a business rule, a KPI value or a
+canonical interpretation — those remain owned by the `context/` layer (see
+**Duplicate Truth Prevention**).
+
+**Metadata and provenance still apply.** Every committed export keeps its
+companion metadata record and its recorded source, date and date range, exactly
+as required by **Metadata Relationship** above. This decision changes none of it.
+
+**What this decision does not define.** It sets no retention, archival, deletion,
+review, approval or filename requirement, no Amazon report schema, name or
+cadence, and it authorises no Amazon Ads action. Anything not stated here remains
+as already documented elsewhere, or `[VERIFY]`.
+
 ## Evidence Filename Convention
 
 Recommended repository naming patterns for material filed in this layer.
