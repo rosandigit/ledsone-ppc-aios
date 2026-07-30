@@ -102,8 +102,8 @@ Supporting: `validation/CONTEXT_REVIEW.md` records the Context layer's open
 
 ## Required Evidence
 
-A brief may mark a request "ready to proceed" only when the relevant approved
-evidence is available. Approved evidence includes:
+A brief may mark a request **ready for downstream execution** only when the
+relevant approved evidence is available. Approved evidence includes:
 
 - **Amazon Ads reports**
 - **Campaign exports**
@@ -112,10 +112,22 @@ evidence is available. Approved evidence includes:
 - **Business request** (documented)
 - **Approved operational evidence**
 
+**"Relevant" is request-scoped and downstream-scoped.** Which of the above is
+relevant to a given brief depends on the request and on the **recommended
+downstream skill**. That downstream skill's own `Required Evidence` section is the
+**authoritative owner** of what it requires; this skill points to it and never
+restates it. Nothing here classifies any listed source as universally required or
+universally optional, and no single listed source is asserted to be sufficient on
+its own — that determination belongs to the downstream skill.
+
+**Missing evidence does not stop the brief.** See **Decision Rules**: a brief
+still completes, and may still route. What missing evidence prevents is marking
+the request **ready for downstream execution**.
+
 **Manual opinion alone is insufficient.** A request with no filed evidence behind
 it cannot be marked ready; the brief records the gap under **Evidence Missing**
-and sets the decision to **Insufficient Evidence**. All evidence must be filed
-per `README.md` with its source, date and date range.
+and sets **Downstream Readiness** to **NOT READY — Insufficient Evidence**. All
+evidence must be filed per `README.md` with its source, date and date range.
 
 ---
 
@@ -134,14 +146,18 @@ Check missing information   (evidence gaps, [VERIFY] items, unresolved inputs)
    ↓
 Prepare structured brief    (complete the Output Template)
    ↓
-Recommend next skill        (route per the Dependency Matrix)
+Recommend next skill        (route per the Dependency Matrix, where the request
+   ↓                         supports one)
+State downstream readiness  (READY / NOT READY — Insufficient Evidence)
 ```
 
 - The skill produces a brief and a routing recommendation only. It does not
   execute the recommended next skill and it does not act on Amazon Ads.
 - Where required evidence or a required input is missing, the workflow still
-  completes a brief — but the brief records **Insufficient Evidence** and lists
-  what must be supplied before a downstream skill can proceed.
+  completes a brief — and may still recommend a downstream skill (see **Decision
+  Rules**) — but the brief records the gap under **Evidence Missing**, sets
+  **Downstream Readiness** to **NOT READY — Insufficient Evidence**, and lists
+  what must be supplied before that downstream skill can proceed.
 - No step beyond the above is assumed; any additional workflow is **[VERIFY]**.
 
 ---
@@ -163,10 +179,23 @@ the actual request and filed evidence, never invented.
 | Known Constraints | *(empty)* |
 | Outstanding Questions | *(empty)* |
 | Recommended Next Skill | *(empty)* |
+| Downstream Readiness | *(empty)* |
 
 > The completed brief is work-preparation output. It is not a report and not a
 > recommendation to act. Store completed briefs per repository convention (not as
 > business rules in `context/`).
+
+**Using the last three fields together.** **Recommended Next Skill** records the
+route (or, where the request cannot determine one, the options and the open
+question). **Downstream Readiness** records whether that recommended skill may
+actually proceed — **READY**, or **NOT READY — Insufficient Evidence**.
+**Evidence Missing** carries what must be supplied before it can proceed. A route
+may therefore be recommended while readiness is NOT READY; that combination is
+expected, not contradictory.
+
+**READY / NOT READY is scoped to this skill's downstream-readiness decision.** It
+is not a repository-wide status vocabulary and is distinct from the validation
+status a downstream skill sets on its own output.
 
 ---
 
@@ -179,11 +208,40 @@ This skill:
 - Does **NOT** change budgets.
 - Does **NOT** create keywords.
 - Does **NOT** create negatives.
-- Does **NOT** recommend actions without evidence.
+- Does **NOT** recommend **Amazon Ads actions** — PPC optimisation or execution —
+  without evidence. This constrains *actions*, **not** routing: it does not
+  prevent recommending a downstream skill where the documented request supports
+  that route, and no such recommendation means downstream execution is ready
+  (see **B** and **C** below).
 
-**Insufficient Evidence.** If required evidence is missing, the skill does not
-proceed to a recommendation. It states **Insufficient Evidence**, records what is
-missing under **Evidence Missing**, and lists the required evidence to obtain.
+**Brief completion, routing and downstream readiness are three separate
+decisions.** Missing Amazon Ads evidence affects only the third.
+
+**A. Brief completion.** Missing evidence does **not** stop the brief. The skill
+completes the Output Template regardless, recording what is known and what is
+missing. A brief carrying **NOT READY — Insufficient Evidence** is a valid,
+complete output — not a failure.
+
+**B. Routing.** Missing Amazon Ads evidence does **not** by itself prevent the
+skill from identifying and recommending the appropriate downstream skill. Where
+the documented request contains enough information to determine the route, the
+skill records that route under **Recommended Next Skill**. **Where the request
+itself is insufficient to determine a route, no route is invented** — the options
+are recorded and the ambiguity flagged as an **Outstanding Question** (see
+**Dependency Matrix**).
+
+**C. Downstream readiness.** A recommended downstream skill must **never** be
+represented as ready to execute while the evidence that skill requires is
+missing. **A recommendation is a route, not a clearance to run.** Where that
+evidence is missing, the brief sets **Downstream Readiness = NOT READY —
+Insufficient Evidence**, records the gap under **Evidence Missing**, and lists
+what must be supplied before the recommended downstream skill can proceed.
+
+**Scope of this rule.** The above governs **`ppc-brief`'s own routing and
+downstream-readiness behaviour only.** It defines no evidence-sufficiency policy
+for any other skill, and **READY / NOT READY** is this skill's downstream-readiness
+label — not a repository-wide status vocabulary. Each downstream skill remains the
+owner of its own evidence requirements and its own validation status.
 
 **Routing, not acting.** The only recommendation this skill makes is *which skill
 should run next* (see **Dependency Matrix**). It never recommends an Amazon Ads
@@ -246,8 +304,15 @@ needed, link to its owning document.
 - **Cannot infer campaign performance.** It does not calculate or judge metrics;
   that is the downstream skills' role.
 - **Cannot invent metrics.** KPI values come only from `context/target-metrics.md`.
-- **Cannot recommend optimisation without evidence.** Missing evidence →
-  **Insufficient Evidence**.
+- **Cannot recommend optimisation without evidence.** This concerns **PPC
+  optimisation recommendations** — bid, budget, keyword, targeting or campaign
+  changes — which this skill never makes, and never on unsupported grounds. Where
+  the evidence a recommended downstream skill requires is missing, it is
+  **Downstream Readiness** that becomes **NOT READY — Insufficient Evidence**.
+  **This limitation does not prohibit routing:** a routing recommendation is
+  neither an optimisation recommendation nor clearance for downstream execution,
+  and may still be made where the documented request supports the route (see
+  **Decision Rules → B** and **→ C**).
 - **Cannot resolve product references yet.** `context/amazon-vendor-bridge.md` is
   unpopulated, so ASIN/SKU-to-campaign mapping cannot be completed. [VERIFY]
 - **Unknown approval workflow.** How a brief is reviewed/approved before work
@@ -270,5 +335,13 @@ document.
 | What Context documents does it consume? | Yes | Required Context |
 | What does it NOT do? | Yes | Purpose; Decision Rules |
 | Which skill should run next? | Yes | Dependency Matrix |
+| Can it run when Amazon evidence is missing? | Yes | **YES** — Decision Rules → A |
+| Can it still complete the brief? | Yes | **YES** — Decision Rules → A; Workflow |
+| Can it still recommend a downstream skill? | Yes | **YES, if the documented request supports a route** — Decision Rules → B |
+| Under what condition may it recommend a downstream skill? | Yes | Decision Rules → B — the request must contain enough information to determine the route; otherwise no route is invented and the ambiguity is an Outstanding Question |
+| Does a recommendation mean downstream execution is ready? | Yes | **NO** — Decision Rules → C: a recommendation is a route, not a clearance to run |
+| What happens when the downstream skill's evidence is missing? | Yes | Decision Rules → C — set **Downstream Readiness = NOT READY — Insufficient Evidence**, record **Evidence Missing**, and list what must be supplied before that skill can proceed |
+| Where are the downstream skill's evidence requirements owned? | Yes | Required Evidence — in that downstream skill's own `Required Evidence` section; never restated here |
+| Does this rule apply to the other 11 skills? | Yes | **NO** — Decision Rules → Scope of this rule; it governs `ppc-brief` routing/readiness only |
 
 **Result: PASS**
