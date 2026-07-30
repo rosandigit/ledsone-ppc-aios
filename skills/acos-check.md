@@ -71,8 +71,14 @@ from the request or from filed evidence.
 
 - **Campaign Performance Report** — campaign performance evidence.
 - **Advertising Report** — Amazon Ads spend/sales reporting.
-- **Campaign** — as defined in `context/campaign-list.md` (identity referenced
-  there, not redefined here).
+- **Campaign identity and ad type** — **may be taken directly from the filed
+  campaign performance evidence** where those attributes are explicitly present
+  and unambiguous in that evidence. `context/campaign-list.md` remains the
+  canonical campaign register specification and is consulted where it carries the
+  campaign, but **it does not have to be populated first** for this skill to
+  produce a finding from evidence that supplies identity and ad type itself.
+  Identity is never redefined here. See **Decision Rules → Runtime campaign
+  identity and ad type**.
 - **Marketplace** — the Amazon marketplace (repository is GBP/UK-denominated).
 - **Date Range** — the reporting window (source, date and date range required per
   `README.md`).
@@ -97,7 +103,7 @@ or rules (see **Duplicate Truth Prevention**).
 | `context/target-metrics.md` | **Authoritative KPI targets** — ACoS/ROAS targets (overall and per ad type), CTR/CVR context, the decision triggers (§3), and the critical KPI-vs-rule-trigger distinction. Applied by reference only; never restated. |
 | `context/bid-rules.md` | Sample-size gate (evidence sufficiency) and the ACoS raise trigger context, referenced when framing a finding for a downstream bid review |
 | `context/budget-rules.md` | Budget minimums, overrides and stock gate, referenced when a finding implies a budget interaction |
-| `context/campaign-list.md` | Campaign identity and type (ACoS targets are defined per ad type) |
+| `context/campaign-list.md` | Canonical campaign register **specification** — campaign identity and ad type (ACoS targets are defined per ad type). Consulted where it carries the campaign; **not a prerequisite** where the filed evidence itself supplies identity and ad type — see **Decision Rules → Runtime campaign identity and ad type** |
 | `context/reporting-schedule.md` | Evidence-filing and reporting governance for the review output |
 | `skills/ppc-brief.md` | The upstream skill that scopes the request |
 | `skills/search-term-check.md` | An upstream skill whose findings may prompt an ACoS review |
@@ -196,6 +202,30 @@ This skill:
 - Does **NOT** pause campaigns.
 - Does **NOT** modify Amazon Ads.
 - Does **NOT** duplicate KPI thresholds.
+
+**Runtime campaign identity and ad type.** Campaign identity and ad type **may be
+taken directly from the filed campaign performance evidence** where those
+attributes are **explicitly present and unambiguous** in that evidence. A
+populated `context/campaign-list.md` is **not a prerequisite** in that case.
+
+- **The canonical register is not changed by this.** Using identity or ad type
+  from runtime evidence **does not populate, update, replace or become**
+  `context/campaign-list.md`. That file remains the canonical campaign register
+  specification and owns itself; how it is populated is defined there, not here,
+  and is unaffected by this skill.
+- **Never infer.** If campaign identity or ad type is **absent, ambiguous,
+  conflicting, or cannot be established** from the filed evidence, the skill
+  **does not infer it**. The unresolved attribute stays `[VERIFY]` and is recorded
+  under **Evidence Missing**.
+- **Where the gap prevents applying a target.** ACoS targets are defined per ad
+  type in `context/target-metrics.md`. Where unresolved identity or ad type
+  prevents selecting and applying the appropriate approved target, the existing
+  **Insufficient Evidence** behaviour below applies and no performance verdict is
+  produced. Identity or ad type that **conflicts** across sources follows the
+  existing **Conflict** behaviour below.
+- **Scope.** This governs **`acos-check`'s runtime evidence handling only.** It
+  defines no campaign-identity rule for any other skill, resolves no gap, defines
+  no export schema, report name or cadence, and changes no target or threshold.
 
 **Insufficient Evidence.** If evidence is missing or too thin to assess ACoS, set
 **Validation Status = Insufficient Evidence**, record what is missing under
@@ -296,5 +326,13 @@ document.
 | Which Context documents are consumed? | Yes | Required Context |
 | What does it NOT do? | Yes | Purpose; Decision Rules |
 | Which downstream skills follow? | Yes | Dependency Matrix |
+| Can campaign identity come from filed runtime evidence? | Yes | **YES**, where explicitly present and unambiguous — Inputs; Decision Rules → Runtime campaign identity and ad type |
+| Can ad type come from filed runtime evidence? | Yes | **YES**, on the same condition — Decision Rules → Runtime campaign identity and ad type |
+| Must `context/campaign-list.md` be populated before every run? | Yes | **NO** — not a prerequisite where the filed evidence itself supplies identity and ad type — Inputs; Required Context; Decision Rules |
+| Does using runtime identity populate or replace the canonical register? | Yes | **NO** — Decision Rules → "The canonical register is not changed by this"; `context/campaign-list.md` owns itself and is unaffected |
+| What happens if campaign identity is missing or ambiguous? | Yes | **Never inferred** — stays `[VERIFY]`, recorded under **Evidence Missing** — Decision Rules → "Never infer" |
+| What if ad type cannot be established and the appropriate target therefore cannot be selected? | Yes | Existing **Insufficient Evidence** behaviour applies; no performance verdict is produced — Decision Rules |
+| Does this resolve GAP-C02? | Yes | **NO** — Decision Rules → Scope: it resolves no gap; the register remains empty and owned by `context/campaign-list.md` |
+| Does this rule apply to other skills? | Yes | **NO** — Decision Rules → Scope: `acos-check` runtime evidence handling only |
 
 **Result: PASS**
