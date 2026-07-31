@@ -77,8 +77,11 @@ and no rule thresholds against which they will be tested.
 - **Evaluation timestamp / date** — establishes the current-day / intraday
   evaluation point the canonical rule is applied at; the cadence and windows are
   defined in `context/hour-budget-rules.md`.
-- **Marketplace** — selects the applicable canonical parameter set; the values are
-  owned by `context/hour-budget-rules.md` (some, e.g. US/CA, are `[VERIFY]` there).
+- **Marketplace** — subject to **two independent tests**. **Routing authorisation**
+  (Test 1) is owned by `context/marketplace-routing.md`. **Content availability**
+  (Test 2) — whether the canonical parameter set holds verified values for that
+  marketplace — is owned by `context/hour-budget-rules.md` (some, e.g. US/CA, are
+  `[VERIFY]` there). Never inferred when missing or ambiguous.
 - **Campaign identity + type / scope** — the campaign under review (SP / SB / SD),
   as defined in `context/campaign-list.md` (identity referenced there, not
   redefined here).
@@ -97,7 +100,7 @@ is **[VERIFY]**; do not assume it.
 | Field | Purpose | Expected Source | Validation Requirement |
 |-------|---------|-----------------|------------------------|
 | Evaluation timestamp / date | Fixes the intraday evaluation point per the canonical rule | Request / filed evidence timestamp | Must be present to establish the current-day evaluation point by reference |
-| Marketplace | Selects the canonical parameter set | Request / `context/campaign-list.md` | Must map to a marketplace whose values are defined in `context/hour-budget-rules.md`; otherwise `[VERIFY]` |
+| Marketplace | Gates routing, then selects the canonical parameter set | Request / `context/campaign-list.md` | **Test 1 —** must be authorised in `context/marketplace-routing.md`; if unauthorised, missing or ambiguous, do not route and never substitute UK. **Test 2 —** `context/hour-budget-rules.md` must hold verified values for it; otherwise `[VERIFY]`. Both must pass; neither implies the other |
 | Campaign identity + type / scope | Confirms SP/SB/SD applicability and scope | `context/campaign-list.md` | Must be identified; unresolved scope → Insufficient Evidence |
 | Current daily budget | Feeds the canonical constraint and pacing comparison | Amazon Ads current-day export → `evidence/` | Must be the current daily budget; never inferred |
 | Current-day advertising spend | Feeds the canonical intraday pacing comparison | Amazon Ads current-day (intraday) export → `evidence/` | Must be current-day spend; multi-day spend is **not** a substitute |
@@ -116,6 +119,7 @@ or values (see **Duplicate Truth Prevention**).
 
 | Context document | Consulted for |
 |------------------|---------------|
+| `context/marketplace-routing.md` | **Authoritative marketplace routing (Test 1)** — whether a marketplace is authorised for Phase 1 routing. Consulted **before** the canonical rule. It owns no rule content and does not state whether Hour Budget values exist for a marketplace. |
 | `context/hour-budget-rules.md` | **Authoritative Hour Budget decision logic** — the intraday rule, its conditions, constraint, action, evaluation cadence and marketplace values. Applied by reference only; never restated. |
 | `context/target-metrics.md` | **Authoritative metric definition** — the ACoS definition the canonical rule triggers on. Referenced, never redefined. |
 | `context/campaign-list.md` | Campaign identity, type (SP/SB/SD) and scope for the campaign in question. |
@@ -164,7 +168,9 @@ Receive request
    ↓
 Validate campaign identity & scope       (resolved and in-scope? — else Insufficient Evidence)
    ↓
-Validate marketplace                     (defined in the canonical rule? — else [VERIFY])
+Test 1 — routing authorisation           (authorised in context/marketplace-routing.md? — else HALT; record the CLAUDE.md §E outcome ([VERIFY] / Insufficient Evidence); never UK)
+   ↓
+Test 2 — canonical content availability  (does context/hour-budget-rules.md hold verified values for it? — else [VERIFY])
    ↓
 Determine required evidence fields        (by reference to context/hour-budget-rules.md)
    ↓
@@ -188,6 +194,20 @@ Recommend downstream skill                (route per the Dependency Matrix)
   not act on Amazon Ads.
 - It reads the conditions, constraint, action and marketplace values from
   `context/hour-budget-rules.md` **by reference** — it does not copy them here.
+- **Routing authorisation and content availability are independent.** Test 1 passing
+  does not mean Hour Budget values exist for that marketplace; Test 2 passing does
+  not mean the marketplace is authorised. **Both must pass.** It never routes NL or
+  ES merely because `context/hour-budget-rules.md` holds values for them, and US, CA
+  and any other unauthorised marketplace are not routed.
+- **Outcome when Test 1 fails — governed by `CLAUDE.md` → Phase 1a §E.** Where
+  marketplace is **missing, ambiguous, unsupported or outside the authorised
+  scope**, the review **halts at Test 1**, does not consult
+  `context/hour-budget-rules.md`, uses no marketplace value, and **never defaults to
+  UK**. The outcome recorded is the one §E already prescribes — **`[VERIFY]` /
+  Insufficient Evidence, as this skill already provides**. This is an application of
+  existing governance: **no new status is created, and the definitions of
+  `[VERIFY]`, Insufficient Evidence, No Action, Conflict and DRAFT in *Decision
+  Rules* are unchanged.**
 - A campaign with too little current-day data to evaluate is recorded as
   **Insufficient Evidence**, never as **No Action** and never as an increase
   candidate.
@@ -319,8 +339,13 @@ as an **Outstanding Question** rather than guessing.
 **This skill performs evidence review only. Business rules remain inside
 `context/`.**
 
+- **`context/marketplace-routing.md` owns marketplace routing authorisation
+  (Test 1)** — and only that. This skill does not restate its authorised-marketplace
+  list, and that file owns no rule content and states no content availability.
 - **`context/hour-budget-rules.md` owns the Hour Budget decision logic** — the
-  intraday rule's conditions, constraint, action, cadence and marketplace values.
+  intraday rule's conditions, constraint, action, cadence and marketplace values,
+  and is the sole authority on whether verified values exist for a marketplace
+  (Test 2).
 - **This skill owns** only the **evaluation procedure** and the **structured DRAFT
   review output**. It does **not** own the underlying thresholds, budget values,
   increase amounts, percentages, timing values or marketplace values.
@@ -330,6 +355,8 @@ as an **Outstanding Question** rather than guessing.
 
 Never duplicate:
 
+- **Marketplace routing authorisation / the authorised-marketplace list** —
+  reference `context/marketplace-routing.md`.
 - **Hour Budget rules / thresholds / budget values / increase amounts / percentages
   / timing / marketplace values** — reference `context/hour-budget-rules.md`.
 - **Metric definitions** (ACoS/ROAS/CTR/CVR) — reference `context/target-metrics.md`.
@@ -386,6 +413,10 @@ document and its explicit references.
 |----------|-------------|-------|
 | What business question does this skill answer? | Yes | Header; Purpose — "when should a campaign receive a DRAFT intraday budget-increase recommendation under the Hour Budget Optimisation rule?" |
 | Which file owns Hour Budget business rules? | Yes | Required Context; Duplicate Truth Prevention — `context/hour-budget-rules.md` |
+| Which file decides whether a marketplace may be routed? | Yes | Required Context — `context/marketplace-routing.md` (Test 1) |
+| Does an authorised marketplace guarantee Hour Budget values exist? | Yes | Workflow — **No**; Test 2 is separate and owned by `context/hour-budget-rules.md` |
+| May the skill default to UK when marketplace is missing, ambiguous or unauthorised? | Yes | Workflow — **No**, never |
+| May NL or ES be routed because Hour Budget values exist for them? | Yes | Workflow — **No**; content existence is not routing authorisation |
 | Does the skill own any Hour Budget thresholds or monetary values? | Yes | Duplicate Truth Prevention — **No; owned by `context/hour-budget-rules.md`** |
 | What runtime evidence does it require? | Yes | Inputs; Runtime Input Contract; Required Evidence |
 | What happens if runtime evidence is missing? | Yes | Decision Rules — Insufficient Evidence |

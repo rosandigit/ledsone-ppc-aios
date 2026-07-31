@@ -73,8 +73,11 @@ from the request or from filed evidence. Field **types** only — no runtime val
 
 - **Evaluation date** — establishes which data window the canonical rule requires;
   the window itself is defined in `context/product-pause-rules.md`.
-- **Marketplace** — selects the applicable canonical parameter set; the values are
-  owned by `context/product-pause-rules.md` (some are `[VERIFY]` there).
+- **Marketplace** — subject to **two independent tests**. **Routing authorisation**
+  (Test 1) is owned by `context/marketplace-routing.md`. **Content availability**
+  (Test 2) — whether the canonical parameter set holds verified values for that
+  marketplace — is owned by `context/product-pause-rules.md` (some are `[VERIFY]`
+  there). Never inferred when missing or ambiguous.
 - **Campaign Type / scope** — SP / SB / SD and campaign/ASIN scope, as defined in
   `context/campaign-list.md` (identity referenced there, not redefined here).
 - **Product / ASIN identity** — the product under review. **Note:** product master
@@ -97,7 +100,7 @@ is **[VERIFY]**; do not assume it.
 | Field | Purpose | Expected Source | Validation Requirement |
 |-------|---------|-----------------|------------------------|
 | Evaluation date | Selects the canonical data window to evaluate | Request / filed evidence date | Must be present to determine the applicable window by reference |
-| Marketplace | Selects the canonical parameter set | Request / `context/campaign-list.md` | Must map to a marketplace whose values are defined in `context/product-pause-rules.md`; otherwise `[VERIFY]` |
+| Marketplace | Gates routing, then selects the canonical parameter set | Request / `context/campaign-list.md` | **Test 1 —** must be authorised in `context/marketplace-routing.md`; if unauthorised, missing or ambiguous, do not route and never substitute UK. **Test 2 —** `context/product-pause-rules.md` must hold verified values for it; otherwise `[VERIFY]`. Both must pass; neither implies the other |
 | Campaign type / scope | Confirms SP/SB/SD applicability and scope | `context/campaign-list.md` | Must be identified; unresolved scope → Insufficient Evidence |
 | Product / ASIN identity | Anchors evaluation to one product | `context/amazon-vendor-bridge.md` | Must be resolved from filed master data; never invented |
 | Product Price | Applies the canonical price-tier logic | `context/amazon-vendor-bridge.md` | Must come from filed master data; never inferred or estimated |
@@ -119,6 +122,7 @@ or values (see **Duplicate Truth Prevention**).
 
 | Context document | Consulted for |
 |------------------|---------------|
+| `context/marketplace-routing.md` | **Authoritative marketplace routing (Test 1)** — whether a marketplace is authorised for Phase 1 routing. Consulted **before** the canonical rule. It owns no rule content and does not state whether Product Pause values exist for a marketplace. |
 | `context/product-pause-rules.md` | **Authoritative Product Pause decision logic** — the rule families, evaluation windows, conditions, price tiers, exceptions and marketplace values. Applied by reference only; never restated. |
 | `context/target-metrics.md` | **Authoritative metric definition** — the ROAS definition the canonical rule triggers on. Referenced, never redefined. |
 | `context/amazon-vendor-bridge.md` | **Product identity / Product Price** master data required to resolve the ASIN and its price. Currently an unpopulated stub — see **Known Limitations**. |
@@ -168,7 +172,11 @@ Receive request
    ↓
 Validate product / ASIN identity        (resolved from filed master data? — else Insufficient Evidence)
    ↓
-Validate marketplace & campaign scope   (identified and in-scope? — else Insufficient Evidence)
+Validate campaign scope                 (identified and in-scope? — else Insufficient Evidence)
+   ↓
+Test 1 — routing authorisation          (authorised in context/marketplace-routing.md? — else HALT; record the CLAUDE.md §E outcome ([VERIFY] / Insufficient Evidence); never UK)
+   ↓
+Test 2 — canonical content availability (does context/product-pause-rules.md hold verified values for it? — else [VERIFY])
    ↓
 Determine required evidence fields       (by reference to context/product-pause-rules.md)
    ↓
@@ -194,6 +202,20 @@ Recommend downstream skill               (route per the Dependency Matrix)
 - It reads the rule families, evaluation windows, conditions, price tiers and
   exceptions from `context/product-pause-rules.md` **by reference** — it does not
   copy them here.
+- **Routing authorisation and content availability are independent.** Test 1 passing
+  does not mean Product Pause values exist for that marketplace; Test 2 passing does
+  not mean the marketplace is authorised. **Both must pass.** It never routes NL or
+  ES merely because content may exist for them anywhere, and US, CA and any other
+  unauthorised marketplace are not routed.
+- **Outcome when Test 1 fails — governed by `CLAUDE.md` → Phase 1a §E.** Where
+  marketplace is **missing, ambiguous, unsupported or outside the authorised
+  scope**, the review **halts at Test 1**, does not consult
+  `context/product-pause-rules.md`, uses no marketplace value, and **never defaults
+  to UK**. The outcome recorded is the one §E already prescribes — **`[VERIFY]` /
+  Insufficient Evidence, as this skill already provides**. This is an application of
+  existing governance: **no new status is created, and the definitions of
+  `[VERIFY]`, Insufficient Evidence, No Action, Conflict and DRAFT in *Decision
+  Rules* are unchanged.**
 - A product with too little data to evaluate is recorded as **Insufficient
   Evidence**, never as **No Action** and never as a pause candidate.
 - No step beyond the above is assumed; any additional workflow is **[VERIFY]**.
@@ -319,15 +341,21 @@ as an **Outstanding Question** rather than guessing.
 **This skill performs evidence review only. Business rules remain inside
 `context/`.**
 
+- **`context/marketplace-routing.md` owns marketplace routing authorisation
+  (Test 1)** — and only that. This skill does not restate its authorised-marketplace
+  list, and that file owns no rule content and states no content availability.
 - **`context/product-pause-rules.md` owns the Product Pause decision logic** — the
   rule families, evaluation windows, conditions, price tiers, exceptions and
-  marketplace values.
+  marketplace values, and is the sole authority on whether verified values exist for
+  a marketplace (Test 2).
 - **This skill owns** only the **evaluation procedure** and the **structured DRAFT
   review output**. It does **not** own the underlying thresholds, price bands, date
   windows, exceptions or marketplace values.
 
 Never duplicate:
 
+- **Marketplace routing authorisation / the authorised-marketplace list** —
+  reference `context/marketplace-routing.md`.
 - **Product Pause rules / thresholds / price bands / windows / exceptions /
   marketplace values** — reference `context/product-pause-rules.md`.
 - **Metric definitions** (ROAS/ACoS/CTR/CVR) — reference `context/target-metrics.md`.
@@ -381,6 +409,10 @@ document and its explicit references.
 | What business question does this skill answer? | Yes | Header; Purpose — "when should a product be recommended for pause because of advertising performance?" |
 | What evidence does it require? | Yes | Inputs; Runtime Input Contract; Required Evidence |
 | Which Context file owns the Product Pause rules? | Yes | Required Context; Duplicate Truth Prevention — `context/product-pause-rules.md` |
+| Which file decides whether a marketplace may be routed? | Yes | Required Context — `context/marketplace-routing.md` (Test 1) |
+| Does an authorised marketplace guarantee Product Pause values exist? | Yes | Workflow — **No**; Test 2 is separate and owned by `context/product-pause-rules.md` |
+| May the skill default to UK when marketplace is missing, ambiguous or unauthorised? | Yes | Workflow — **No**, never |
+| May NL or ES be routed because content may exist for them? | Yes | Workflow — **No**; content existence is not routing authorisation |
 | What happens if runtime evidence is missing? | Yes | Decision Rules — Insufficient Evidence |
 | What happens if a rule parameter is unresolved? | Yes | Decision Rules — [VERIFY] |
 | What happens when evidence conflicts? | Yes | Decision Rules — Conflict |
