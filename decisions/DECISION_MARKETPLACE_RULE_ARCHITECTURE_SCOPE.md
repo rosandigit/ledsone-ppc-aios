@@ -22,6 +22,18 @@ template's binding discipline: approved decisions only, business rules never
 restated. Whether governance decisions must be re-issued in the template's
 structure is an open repository question — see "Known Limitations".
 
+STATUS RECONCILIATION (2026-07-31). This record was created BEFORE the canonical
+Phase 1 marketplace-routing architecture was approved, and it originally recorded
+CLAUDE.md migration precondition (a) as OPEN. That was correct at the time. It is
+no longer current. Precondition (a) is now SATISFIED, and
+decisions/DECISION_MARKETPLACE_ROUTING_ARCHITECTURE_PHASE1.md is the authoritative
+owner of current precondition-(a) status and of the approved architecture. This
+record's precondition statements are now scoped to their creation date and point
+forward to that record. NO Owner marketplace-scope decision was changed and NO
+architecture content was copied here. Precondition (b) remains OPEN, migration
+remains NOT AUTHORISED, Phase 1 implementation has NOT STARTED, no registry
+exists, and no registry path or filename is chosen.
+
 No decision-record filename convention is defined in this repository
 (decisions/TEMPLATE_DECISION_RECORD.md -> Known Limitations). The filename below
 is descriptive, not conventional. The status inside this document, not the
@@ -43,6 +55,7 @@ filename, is authoritative.
 | Reviewer | `[VERIFY]` — no Technical / Queryability Reviewer role is defined anywhere in this repository (see `validation/REPOSITORY_GAP_REGISTER.md` → GAP-G01). None is assigned or invented here. |
 | Created | 2026-07-31 |
 | Repository HEAD when created | `cccf54bf79686653814d2c8dc1e92e3abf1087f5` |
+| Revised | 2026-07-31 — **status reconciliation only.** `CLAUDE.md` migration precondition **(a)** moved **OPEN → SATISFIED** to match `decisions/DECISION_MARKETPLACE_ROUTING_ARCHITECTURE_PHASE1.md` (Owner Approved, committed at `f70a0a8`), which owns that status. Precondition statements in this record are now scoped to their creation date and point forward to that record. **No Owner marketplace-scope decision was changed, no architecture content was copied here, no registry path or filename was introduced, no PPC value was added, and no gap status was changed.** Precondition **(b)** remains **OPEN**; migration remains **NOT AUTHORISED**. |
 | Decision Type | Governance / architecture scope — resolves three marketplace-scope questions |
 | Approval Scope | **The three marketplace-scope decisions in this record, and nothing else.** |
 | Authoritative for | **The three Owner marketplace-scope decisions recorded here, and nothing else.** This record defines no PPC business rule, owns no rule value, approves no structure and authorises no action. |
@@ -376,12 +389,17 @@ execute:
 - **(b)** a dedicated migration task explicitly scoped, reviewed and approved
   before execution.
 
-**Status after this record:**
+**Status as at this record's creation, and current status.** The left column
+records the position when this record was created (2026-07-31, HEAD `cccf54b`).
+The right column records the position now. **Read the right column for current
+state.**
 
-| Precondition | Status |
-|--------------|--------|
-| **(a)** Canonical marketplace-routing design completed and approved | **OPEN.** A design recommendation exists from the discovery, but it is not approved and is not filed as a repository asset. Not approved here. |
-| **(b)** Dedicated migration task scoped, reviewed and approved | **OPEN.** Not scoped and not approved here. |
+| Precondition | Status as at this record's creation | Current status |
+|--------------|--------------------------------------|-----------------|
+| **(a)** Canonical marketplace-routing design completed and approved | **OPEN.** A design recommendation existed from the discovery, but it was not approved and was not filed as a repository asset. **Not approved by this record.** | **SATISFIED** — owned by `decisions/DECISION_MARKETPLACE_ROUTING_ARCHITECTURE_PHASE1.md`. **That record is authoritative for this status; this record is not.** |
+| **(b)** Dedicated migration task scoped, reviewed and approved | **OPEN.** Not scoped and not approved here. | **OPEN** — unchanged. |
+
+**Migration Allowed: NO.** Both preconditions are required, and **(b)** is OPEN.
 
 **What this record does for the migration:** it removes the three scope blockers
 that made precondition **(b)** impossible to scope. That is its entire effect on
@@ -423,8 +441,13 @@ modifying `CLAUDE.md`; modifying any rule file; modifying
 
 Genuine unresolved items. None is worked around by inventing data.
 
-1. **Migration preconditions (a) and (b) both remain OPEN.** This record closes
-   scope blockers only. It approves no design and no migration task. `[VERIFY]`
+1. **Precondition (b) remains OPEN. Precondition (a) is now SATISFIED.** As at
+   this record's creation both were OPEN — this record closed scope blockers
+   only, and approved no design and no migration task. Precondition **(a)** has
+   since been satisfied by
+   `decisions/DECISION_MARKETPLACE_ROUTING_ARCHITECTURE_PHASE1.md`, which owns
+   that status. Precondition **(b)** is unchanged and still gates migration.
+   `[VERIFY]`
 2. **Marketplace-agnostic content inside the Bid and Budget rule files is not
    classified.** Decision 2 assigns the two rule *families* to UK; it does not
    assert that every statement inside those files is marketplace-scoped. At least
@@ -459,15 +482,20 @@ Genuine unresolved items. None is worked around by inventing data.
 
 ## Next Step
 
-**One next action.** Produce the **canonical marketplace-routing design** as a
-separate, reviewable artefact for Owner approval — satisfying `CLAUDE.md`
-precondition **(a)** — incorporating the three decisions recorded here as binding
-constraints, in particular the preservation requirements (**F**, **G**), the
-no-seeding prohibition (**E**), and the no-US/CA prohibition (**J**).
+**Recorded next action — COMPLETED.** The next action recorded by this record was
+to produce the **canonical marketplace-routing design** as a separate, reviewable
+artefact for Owner approval — satisfying `CLAUDE.md` precondition **(a)** —
+incorporating the three decisions recorded here as binding constraints, in
+particular the preservation requirements (**F**, **G**), the no-seeding
+prohibition (**E**), and the no-US/CA prohibition (**J**). That design has since
+been produced and Owner-approved; see
+`decisions/DECISION_MARKETPLACE_ROUTING_ARCHITECTURE_PHASE1.md`.
+
+**For the current next action, read that record. This record does not own it.**
 
 The dedicated migration task (precondition **(b)**) is scoped only **after** that
 design is approved. **No migration step may be taken before both preconditions
-are satisfied.**
+are satisfied**, and **(b)** is still **OPEN**.
 
 ---
 
@@ -489,7 +517,7 @@ makes it **FAIL**.
 | 9 | No US/CA rule, file, value, route or architecture authorisation exists | **PASS** — Decision 3, Boundary **J** |
 | 10 | No marketplace routing file, folder or owner created, named or reserved | **PASS** — none created; no path defined |
 | 11 | No rule content moved, renamed, split or populated | **PASS** — Boundaries **K**, **L** |
-| 12 | Migration remains **NOT EXECUTED**, both preconditions OPEN | **PASS** — Migration Implications |
+| 12 | Migration remains **NOT EXECUTED**; both preconditions OPEN *(as at this record's creation — **(a)** is now SATISFIED and **(b)** remains OPEN; see Migration Implications)* | **PASS** — Migration Implications |
 | 13 | Owner, date and status recorded | **PASS** — Jathukulan, 2026-07-31, OWNER APPROVED |
 | 14 | Owner Decision, Existing Business-Rule Content and Future Marketplace-Specific Evidence kept distinct | **PASS** — "The Three Categories This Record Keeps Separate" |
 
@@ -517,7 +545,9 @@ answer:
 | Does this record authorise populating any rule content? | Yes | **No** — Evidence Implications; Boundary **L** |
 | Where do the actual PPC business rules live? | Yes | Duplicate Truth Prevention; Affected Rule Families — the owning `context/` files |
 | Does this record contain any rule value? | Yes | **No** — Duplicate Truth Prevention |
-| What is the next step? | Yes | Next Step — the canonical marketplace-routing design, for precondition (a) |
+| Is precondition (a) still OPEN? | Yes | **No — now SATISFIED**, owned by `decisions/DECISION_MARKETPLACE_ROUTING_ARCHITECTURE_PHASE1.md` — Migration Implications |
+| Is precondition (b) still OPEN, and is migration allowed? | Yes | **(b) OPEN; migration NOT allowed** — Migration Implications |
+| What is the next step? | Yes | Next Step — the recorded next action is **completed**; the current next action is owned by `decisions/DECISION_MARKETPLACE_ROUTING_ARCHITECTURE_PHASE1.md` |
 | What remains unresolved? | Yes | Known Limitations |
 
 **Result: PASS**
