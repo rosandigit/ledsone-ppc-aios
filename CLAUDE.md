@@ -171,50 +171,66 @@ authorisation.
 
 A **future, separately-scoped Phase 1a implementation task** is authorised to:
 
-1. create **one** canonical marketplace-routing registry; and
-2. modify **`skills/hour-budget-check.md`**, only as far as necessary for it to
+1. create the one canonical marketplace-routing registry, at the approved path
+   **`context/marketplace-routing.md`** (see **B**); and
+2. modify **`context/README.md`**, only as far as necessary to make that registry
+   discoverable from the `context/` folder README (see below); and
+3. modify **`skills/hour-budget-check.md`**, only as far as necessary for it to
    consume the approved marketplace-routing model; and
-3. modify **`skills/product-pause-check.md`**, only as far as necessary for it to
+4. modify **`skills/product-pause-check.md`**, only as far as necessary for it to
    consume the approved marketplace-routing model.
 
-**No other existing skill file is authorised for modification by this clause.**
+**Those four paths are the complete set.** No other existing file may be modified
+under this authorisation, and no other file or folder may be created under it.
 *Existing Asset First* remains in force, unchanged, for every other skill and
 every other file.
 
 The safety wording carried by every skill file remains protected by the
 **Repository Safety Rules** above and must not be reworded.
 
-### B. The registry path and filename are NOT approved — and the required ordering
+**Scope of the `context/README.md` change — discoverability only.** It may name
+the canonical registry, reference its path, state at a high level that the
+registry resolves marketplace routing for the approved Phase 1 architecture, and
+point readers to the registry as the authoritative operational routing owner.
 
-The registry's path and filename remain **`[VERIFY]`**.
+It must **not** duplicate the registry's routing matrix, duplicate marketplace
+authorisation data, duplicate the marketplace-scope decisions, contain PPC rule
+values, contain Bid, Budget, Hour Budget or Product Pause rule content, define
+routing logic independently, or become a second routing owner.
+**`context/README.md` remains descriptive and navigational only; the registry is
+the operational routing owner.**
 
-**This clause does not choose, suggest, reserve or imply any path or filename**,
-and none may be inferred from it.
+### B. The approved registry path — and the required ordering
 
-Before the registry is created, its proposed path and filename must be
-**proposed explicitly, checked against existing assets, checked for
-duplicate-truth risk, reviewed, and Owner approved.** The implementation task
-**may not create the registry before that approval.**
+**Canonical Phase 1a marketplace-routing registry:
+`context/marketplace-routing.md`.**
 
-**Neither authorised skill may be changed to consume the registry before that
-same approval.** Until the path and filename are approved, both skills remain
-untouched.
+**Status: OWNER APPROVED** — approved by Jathukulan (Owner) on 2026-07-31,
+following an explicit proposal, an *Existing Asset First* check and a
+duplicate-truth check. **This supersedes the earlier `[VERIFY]` status** of the
+registry path and filename.
 
-Once the path and filename are approved, the Phase 1a implementation task may
-create the approved registry **and** modify the two authorised skills to consume
-it. **Registry creation must occur before, or atomically with, the dependent
-skill changes.**
+**Path approval is not creation.** The registry **has not been created**, and this
+clause does not create it. The Phase 1a implementation task may create it **only**
+at the approved path above; any other path requires separate Owner approval.
 
-**The repository must never be left in a state where either authorised skill
-refers to** an absent registry, an unapproved registry path, a `[VERIFY]`
-registry location, or a registry that was not created as part of the approved
+**Registry creation must occur before, or atomically with, the dependent changes**
+to `context/README.md`, `skills/hour-budget-check.md` and
+`skills/product-pause-check.md`.
+
+**The repository must never be left in a state where either authorised skill, or
+`context/README.md`, refers to** a registry that does not exist, a path other than
+the approved one, or a registry that was not created as part of the approved
 implementation.
 
-This does **not** require registry creation and skill modification to be separate
-commits. **One bounded implementation task, and one commit, are permitted** after
-path approval — provided the final validated state contains the approved
-registry, both authorised skill integrations, and no broken or unresolved
-registry reference.
+This does **not** require the registry, the README update and the skill
+integrations to be separate commits. **One bounded implementation task, and one
+commit, are permitted** — provided the final validated state contains the approved
+registry, the minimal README discoverability update, both authorised skill
+integrations, and no broken or unresolved registry reference. Separate commits are
+not required unless some other governance requires them.
+
+**This clause executes none of those operations today.**
 
 ### C. The two-test model must be preserved
 
@@ -270,7 +286,11 @@ This clause does not authorise:
   IT;
 - US routing or US rule content;
 - adding CA, NL or ES to the authorised architecture;
-- selecting or creating the registry path or filename.
+- creating the registry today, or ever creating it at any path other than the
+  approved one;
+- modifying `context/README.md` today, or extending that future change beyond
+  discoverability;
+- modifying any file outside the four paths listed in **A**.
 
 ### G. Relation to existing governance
 
@@ -288,10 +308,12 @@ appear to disagree, **the owning record above wins.**
 ### H. Status of this authorisation
 
 - **Owner:** Jathukulan · **Date:** 2026-07-31 · **Status:** Owner Approved —
-  authorisation only
+  authorisation and registry-path approval only
 - **Phase 1a Implementation Started:** NO
 - **Registry Created:** NO
-- **Registry Path/Filename Approved:** NO — `[VERIFY]`
+- **Registry Path Approved:** YES — `context/marketplace-routing.md`
+- **`context/README.md` Modified:** NO — future modification authorised for
+  discoverability only, see **A**
 - **Phase 1b Authorised:** NO
 - **Phase 2 Authorised By This Clause:** NO
 
