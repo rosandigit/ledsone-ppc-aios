@@ -154,6 +154,152 @@ This clause records the Owner's authorisation of the exception only. It is
 particular structure. Each remains a separate task requiring its own scope and
 approval.
 
+## Approved Authorisation — Phase 1a Marketplace-Routing Implementation
+
+**Authorised by Jathukulan (Owner) on 2026-07-31. Status: Owner Approved —
+authorisation only.**
+
+This clause is a **second, separate and narrower** exception to *Existing Asset
+First* ("Never overwrite, delete, rename or move existing files"). It is **not**
+part of, and does not extend, amend or interact with, the **Approved Exception —
+Marketplace-Specific Rule Architecture Migration** above. That clause governs the
+future migration of the four rule families. **This clause governs neither those
+files nor that migration.** The two must never be read together as one
+authorisation.
+
+### A. What is authorised
+
+A **future, separately-scoped Phase 1a implementation task** is authorised to:
+
+1. create **one** canonical marketplace-routing registry; and
+2. modify **`skills/hour-budget-check.md`**, only as far as necessary for it to
+   consume the approved marketplace-routing model; and
+3. modify **`skills/product-pause-check.md`**, only as far as necessary for it to
+   consume the approved marketplace-routing model.
+
+**No other existing skill file is authorised for modification by this clause.**
+*Existing Asset First* remains in force, unchanged, for every other skill and
+every other file.
+
+The safety wording carried by every skill file remains protected by the
+**Repository Safety Rules** above and must not be reworded.
+
+### B. The registry path and filename are NOT approved — and the required ordering
+
+The registry's path and filename remain **`[VERIFY]`**.
+
+**This clause does not choose, suggest, reserve or imply any path or filename**,
+and none may be inferred from it.
+
+Before the registry is created, its proposed path and filename must be
+**proposed explicitly, checked against existing assets, checked for
+duplicate-truth risk, reviewed, and Owner approved.** The implementation task
+**may not create the registry before that approval.**
+
+**Neither authorised skill may be changed to consume the registry before that
+same approval.** Until the path and filename are approved, both skills remain
+untouched.
+
+Once the path and filename are approved, the Phase 1a implementation task may
+create the approved registry **and** modify the two authorised skills to consume
+it. **Registry creation must occur before, or atomically with, the dependent
+skill changes.**
+
+**The repository must never be left in a state where either authorised skill
+refers to** an absent registry, an unapproved registry path, a `[VERIFY]`
+registry location, or a registry that was not created as part of the approved
+implementation.
+
+This does **not** require registry creation and skill modification to be separate
+commits. **One bounded implementation task, and one commit, are permitted** after
+path approval — provided the final validated state contains the approved
+registry, both authorised skill integrations, and no broken or unresolved
+registry reference.
+
+### C. The two-test model must be preserved
+
+The implementation must preserve the approved separation of two independent
+questions:
+
+- **Test 1 — authorisation:** is the marketplace authorised for this
+  architecture?
+- **Test 2 — content:** does the owning rule source hold the verified content
+  the requested activity needs?
+
+Neither answers the other, in either direction, and they must never be collapsed
+into a single test.
+
+**The registry owns marketplace authorisation and routing only.** It must **not**
+become the owner of PPC rule values, rule-content availability, thresholds,
+formulas, marketplace-specific business rules, or evidence sufficiency. Each of
+those remains with its existing or future approved owning asset.
+
+### D. Marketplace boundary
+
+The authorised architecture scope remains exactly **UK, DE, FR and IT**.
+
+**US is explicitly excluded. CA is outside scope.**
+
+Existing NL/ES content remains preserved as required by the Owner marketplace-scope
+decision, but **NL and ES are not authorised routing marketplaces**.
+
+**The existence of content does not itself grant routing authorisation.**
+
+### E. No default marketplace
+
+Where marketplace is **missing, ambiguous, unsupported, or outside the authorised
+scope**, the implementation must **not** default to UK or to any other
+marketplace. The outcome remains unresolved — `[VERIFY]` / Insufficient Evidence
+— as the owning skill already provides. **No new repository-wide status
+vocabulary is introduced.**
+
+### F. What is NOT authorised
+
+This clause does not authorise:
+
+- **implementation during the task that recorded it** — it performs no file
+  operation and authorises none today;
+- Phase 1b, or modification of any other skill;
+- Phase 2, or any marketplace rule-family migration;
+- moving, renaming, splitting or restructuring any of the four rule-family files;
+- populating marketplace-specific Bid, Budget, Hour Budget or Product Pause rule
+  content;
+- any change to a PPC business rule, threshold, percentage, currency amount,
+  click gate, evaluation window, formula or decision criterion;
+- copying, inferring, adapting or currency-converting UK values into DE, FR or
+  IT;
+- US routing or US rule content;
+- adding CA, NL or ES to the authorised architecture;
+- selecting or creating the registry path or filename.
+
+### G. Relation to existing governance
+
+- `decisions/DECISION_MARKETPLACE_ROUTING_ARCHITECTURE_PHASE1.md` remains the
+  owner of the **approved Phase 1 architecture**.
+- `decisions/DECISION_MARKETPLACE_RULE_ARCHITECTURE_SCOPE.md` remains the owner
+  of the **Owner marketplace-scope decisions**.
+- **`CLAUDE.md` owns the AI operating and safety authorisation** — what a task
+  may and may not do — and nothing else.
+
+This clause therefore states boundaries, not architecture. It does not reproduce
+the routing design and holds no PPC rule content. Where it and an owning record
+appear to disagree, **the owning record above wins.**
+
+### H. Status of this authorisation
+
+- **Owner:** Jathukulan · **Date:** 2026-07-31 · **Status:** Owner Approved —
+  authorisation only
+- **Phase 1a Implementation Started:** NO
+- **Registry Created:** NO
+- **Registry Path/Filename Approved:** NO — `[VERIFY]`
+- **Phase 1b Authorised:** NO
+- **Phase 2 Authorised By This Clause:** NO
+
+**Migration precondition (b) remains OPEN.** This clause neither satisfies nor
+affects it. Precondition (b) gates the migration of the four rule families; Phase
+1a moves no rule file and is outside that clause's subject matter. Only a separate
+approved record may change (b)'s status.
+
 ## Owner
 
 Jathukulan
