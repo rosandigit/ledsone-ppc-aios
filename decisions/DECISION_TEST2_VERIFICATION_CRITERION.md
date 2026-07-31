@@ -288,6 +288,84 @@ Genuine unresolved items. None is worked around by inventing data.
 
 ---
 
+## Resolution of Known Limitation 3 — 2026-07-31
+
+### Owner Decision: Option C — File-Level Derivation
+
+**Approved by Jathukulan (Owner) on 2026-07-31.**
+
+**This section is an append-only addition.** Everything above it is unchanged —
+Condition 1, Condition 2, their **AND** relationship, the Owner, Decision Date
+and Status fields, and the Known Limitations text. **Known Limitation 3 is not
+deleted, rewritten or normalised**; it stands as the historical record of the
+open question, and this section records that the Owner has since answered it.
+
+**Known Limitation 3 status: RESOLVED by Owner decision, 2026-07-31.**
+
+### What Option C requires of Condition 1
+
+Applying to Condition 1 — *"marketplace-specific rule content … supported by a
+verified source"*:
+
+1. **The owning rule-family file must identify the source it used.**
+2. **That source must be identifiable.** A generic, unnamed reference — such as
+   "handbook", "source document", "source documents", or equivalent wording that
+   does not identify a specific artefact — is **not sufficient by itself**.
+3. **The owning file must document enough derivation or mapping** for a reviewer
+   or a clean LLM to trace the rule content back to that identified source.
+4. **Labels do not establish provenance.** Calling a file or a source "primary",
+   "verified", "authoritative" or similar **does not** satisfy Condition 1.
+5. **Source existence without traceable derivation is insufficient.** A source may
+   exist and Condition 1 still not be satisfied, if the owning file does not show
+   how its content derives from that source.
+6. **Where an owning Bid or Budget file does not identify its referenced
+   handbook or source document, that missing source identity is a Condition 1
+   provenance gap** for that file.
+
+### What this resolution does NOT do
+
+7. **It classifies nothing.** This decision does **not** classify Bid Rules,
+   Budget Rules, Hour Budget Rules, Product Pause Rules, or any marketplace ×
+   rule-family combination as PASS or FAIL.
+8. **It changes no existing state.** No existing `[VERIFY]` or FAIL state is
+   altered by recording this resolution.
+9. **The later 16-cell validation must apply Option C separately to each cell.**
+   A result reached for one rule family or one marketplace is never inherited by
+   another.
+
+### Observation recorded at HEAD `2145c3ca7b613b43e1c621e9c78d8196672da58c`
+
+Read-only inspection at that HEAD found the following **file-content facts**.
+They describe what the files say. They are **not** Condition 1 verdicts and
+**not** Test 2 results:
+
+- `context/bid-rules.md:47` refers to *"source documents"* without naming one.
+- `context/bid-rules.md:61-62` refers to a *"handbook"* without naming it.
+- `context/budget-rules.md:57` refers to *"source documents"* without naming one.
+- Neither file names a specific source artefact, and no source document of any
+  kind is filed in `evidence/` at that HEAD.
+
+Under point 2 above, an unnamed reference of this kind does not by itself
+identify a source. **Whether that yields a Condition 1 gap for any particular
+marketplace × rule-family cell is for the 16-cell validation to determine, cell
+by cell.** It is not determined here, and no cell is failed by this record.
+
+### Ownership and authorisation unchanged
+
+Test 1 remains owned by `context/marketplace-routing.md`. PPC rule content
+remains owned by the four `context/*-rules.md` files. Evidence-filing governance
+remains with `evidence/README.md` per `CLAUDE.md` → *Evidence First*. The
+failure outcome remains owned by `CLAUDE.md` → Phase 1a **§E**. **This
+resolution creates no new owner, no new status and no new vocabulary**, and it
+adds no PPC business-rule value.
+
+- **Phase 1b Implementation Authorised:** **NO**
+- **Phase 1b Implementation Started:** **NO**
+- **Phase 2 Started:** **NO**
+- **16-cell validation performed by this task:** **NO**
+
+---
+
 ## Next Step
 
 **One next action.** Scope a separate, read-only **validation task** that applies
