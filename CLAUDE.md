@@ -18,9 +18,10 @@ document already exists, leave it as it is and report `Already exists.`
 Never overwrite, delete, rename or move existing files. Never reorganise the
 repository. Never regenerate existing documentation.
 
-Two narrow, named exceptions to this rule exist — see **Approved Exception —
-Marketplace-Specific Rule Architecture Migration** and **Approved Authorisation
-— Phase 1a Marketplace-Routing Implementation** below. The first authorises no
+Three narrow, named exceptions to this rule exist — see **Approved Exception —
+Marketplace-Specific Rule Architecture Migration**, **Approved Authorisation —
+Phase 1a Marketplace-Routing Implementation** and **Approved Authorisation —
+Phase 1b Marketplace-Routing Skill Extension** below. The first authorises no
 file operation today, and each applies to nothing outside the scope defined
 there.
 
@@ -319,13 +320,141 @@ appear to disagree, **the owning record above wins.**
 - **Registry Path Approved:** YES — `context/marketplace-routing.md`
 - **`context/README.md` Modified:** YES — discoverability only, per **A**;
   commit `2bd7568`
-- **Phase 1b Authorised:** NO
+- **Phase 1b Authorised By This Clause:** NO — Phase 1b is authorised
+  separately; see **Approved Authorisation — Phase 1b Marketplace-Routing Skill
+  Extension** below
 - **Phase 2 Authorised By This Clause:** NO
 
 **Migration precondition (b) remains OPEN.** This clause neither satisfies nor
 affects it. Precondition (b) gates the migration of the four rule families; Phase
 1a moves no rule file and is outside that clause's subject matter. Only a separate
 approved record may change (b)'s status.
+
+## Approved Authorisation — Phase 1b Marketplace-Routing Skill Extension
+
+**Authorised by Jathukulan (Owner) on 2026-08-03. Status: Owner Approved —
+authorisation only.**
+
+This clause is a **third, separate and narrower** exception to *Existing Asset
+First*. It does not extend, amend or interact with the two clauses above, and
+the three must never be read together as one authorisation.
+
+**This clause owns only:** Phase 1b authorisation, the authorised and excluded
+paths, the operating boundary, the implementation boundary, and its own status.
+The meaning of "Phase 1b" is owned by
+`decisions/DECISION_PHASE_1B_DEFINITION.md`; Test 1 by
+`context/marketplace-routing.md`; the Test 2 criterion by
+`decisions/DECISION_TEST2_VERIFICATION_CRITERION.md`. Each is referenced, never
+restated. **Where this clause and an owning record appear to disagree, the owning
+record wins.**
+
+### A. What is authorised
+
+A **future, separately-scoped Phase 1b implementation task** is authorised to
+modify the following, each **only as far as necessary for that skill to consume
+the approved marketplace-routing model**:
+
+1. **`skills/campaign-audit.md`**
+2. **`skills/search-term-check.md`**
+3. **`skills/report-draft.md`**
+4. **`skills/keyword-expand.md`**
+5. **`skills/waste-scan.md`**
+6. **`skills/scale-check.md`**
+7. **`skills/ppc-brief.md`**
+
+and to modify:
+
+8. **`context/marketplace-routing.md`**, **only** to record accurately which
+   skills consume it, and the phase-status statements that depend on that list.
+   It must **not** add or remove a marketplace, change any routing outcome,
+   record content-availability status, or acquire PPC rule content. It remains
+   the Test 1 owner and nothing more.
+
+**Those eight paths are the complete set.** No other existing file may be
+modified under this authorisation, and no file or folder may be created under it.
+*Existing Asset First* remains in force for every other file — including
+`skills/hour-budget-check.md` and `skills/product-pause-check.md`, which remain
+integrated under the clause above and are **not re-opened here**.
+
+The safety wording carried by every skill file remains protected by the
+**Repository Safety Rules** above and must not be reworded.
+
+**Required ordering.** The registry's consumer record and the skill integrations
+must be brought into agreement **within the same implementation task**. The
+repository must never be left in a state where `context/marketplace-routing.md`
+misdescribes which skills consume it. Separate commits are not required.
+
+**Inherited boundaries.** The two-test model (**C**), the marketplace boundary
+(**D**) and the no-default rule (**E**) of the clause above apply to Phase 1b
+**unchanged and in full**. No skill modified under this clause may become an
+owner of Test 1, of the Test 2 criterion, or of any `context/` rule file's
+content.
+
+### B. Explicitly NOT authorised — named paths
+
+This clause does **not** authorise modification of:
+
+- `skills/bid-check.md`;
+- `skills/budget-check.md`;
+- `skills/acos-check.md`;
+- `skills/README.md`;
+- `context/README.md`.
+
+The three skills are excluded **by name**. They are not deferred to a later step
+of Phase 1b; they are outside Phase 1b. `skills/README.md` and
+`context/README.md` are not part of Phase 1b.
+
+### C. Operating boundary
+
+Phase 1b authorises **no autonomous execution** and **no direct modification of
+Amazon Ads accounts or campaigns**.
+
+Every output of every skill modified under this clause remains an
+**evidence-backed DRAFT recommendation only**. Amazon Ads changes remain **human
+reviewed and human executed**, exactly as **Human Approval Required** and **Never
+Modify Amazon Ads** above require.
+
+Extending the routing model changes what a skill checks before it reports. It
+changes nothing about what a skill is permitted to do.
+
+### D. What is NOT authorised
+
+This clause does not authorise:
+
+- **implementation during the task that recorded it** — it performs no file
+  operation and authorises none today;
+- **executable Test 2 criterion encoding** — expressly outside Phase 1b per
+  `decisions/DECISION_PHASE_1B_DEFINITION.md`, and separately unauthorised by
+  `decisions/DECISION_TEST2_VERIFICATION_CRITERION.md`;
+- **executable rule logic** of any kind;
+- evidence remediation, evidence filing, or resolving any existing `[VERIFY]`;
+- marketplace expansion, or adding US, CA, NL or ES to the authorised
+  architecture;
+- Phase 2, or any marketplace rule-family migration;
+- moving, renaming, splitting or restructuring any of the four rule-family files;
+- populating marketplace-specific Bid, Budget, Hour Budget or Product Pause rule
+  content;
+- any change to a PPC business rule, threshold, percentage, currency amount,
+  click gate, evaluation window, formula or decision criterion;
+- copying, inferring, adapting or currency-converting UK values into DE, FR or
+  IT;
+- modifying `skills/bid-check.md`, `skills/budget-check.md`,
+  `skills/acos-check.md`, `skills/README.md` or `context/README.md`;
+- modifying any file outside the eight paths listed in **A**.
+
+### E. Status of this authorisation
+
+- **Owner:** Jathukulan · **Date:** 2026-08-03 · **Status:** Owner Approved —
+  authorisation only
+- **Phase 1b Authorised:** YES — by this clause
+- **Phase 1b Implementation Started:** NO
+- **Authorised paths:** the eight listed in **A**
+- **Excluded paths:** the five listed in **B**
+- **Phase 2 Authorised By This Clause:** NO
+- **Migration precondition (b):** unaffected — it remains OPEN and is owned by
+  the migration clause above
+
+**This clause does not itself perform any of those operations.**
 
 ## Owner
 
