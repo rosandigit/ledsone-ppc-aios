@@ -309,11 +309,11 @@ appear to disagree, **the owning record above wins.**
 
 - **Owner:** Jathukulan · **Date:** 2026-07-31 · **Status:** Owner Approved —
   authorisation and registry-path approval only
-- **Phase 1a Implementation Started:** NO
-- **Registry Created:** NO
+- **Phase 1a Implementation Started:** YES — commit `2bd7568`
+- **Registry Created:** YES — commit `2bd7568`
 - **Registry Path Approved:** YES — `context/marketplace-routing.md`
-- **`context/README.md` Modified:** NO — future modification authorised for
-  discoverability only, see **A**
+- **`context/README.md` Modified:** YES — discoverability only, per **A**;
+  commit `2bd7568`
 - **Phase 1b Authorised:** NO
 - **Phase 2 Authorised By This Clause:** NO
 
