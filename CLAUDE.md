@@ -18,9 +18,11 @@ document already exists, leave it as it is and report `Already exists.`
 Never overwrite, delete, rename or move existing files. Never reorganise the
 repository. Never regenerate existing documentation.
 
-One narrow, named exception to this rule exists — see **Approved Exception —
-Marketplace-Specific Rule Architecture Migration** below. It authorises no file
-operation today, and applies to nothing outside the scope defined there.
+Two narrow, named exceptions to this rule exist — see **Approved Exception —
+Marketplace-Specific Rule Architecture Migration** and **Approved Authorisation
+— Phase 1a Marketplace-Routing Implementation** below. The first authorises no
+file operation today, and each applies to nothing outside the scope defined
+there.
 
 ## Evidence First
 
