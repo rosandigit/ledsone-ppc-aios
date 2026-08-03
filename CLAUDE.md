@@ -210,9 +210,12 @@ following an explicit proposal, an *Existing Asset First* check and a
 duplicate-truth check. **This supersedes the earlier `[VERIFY]` status** of the
 registry path and filename.
 
-**Path approval is not creation.** The registry **has not been created**, and this
-clause does not create it. The Phase 1a implementation task may create it **only**
-at the approved path above; any other path requires separate Owner approval.
+**Path approval is not creation.** At the time this clause was approved the
+registry **had not been created**, and this clause did not create it. It approved
+the path and authorised a later, separately-scoped Phase 1a implementation task to
+create it **only** at the approved path above; any other path requires separate
+Owner approval. That implementation was carried out later, in committed repository
+history — commit `2bd7568`.
 
 **Registry creation must occur before, or atomically with, the dependent changes**
 to `context/README.md`, `skills/hour-budget-check.md` and
@@ -230,7 +233,7 @@ registry, the minimal README discoverability update, both authorised skill
 integrations, and no broken or unresolved registry reference. Separate commits are
 not required unless some other governance requires them.
 
-**This clause executes none of those operations today.**
+**This clause does not itself perform any of those operations.**
 
 ### C. The two-test model must be preserved
 
